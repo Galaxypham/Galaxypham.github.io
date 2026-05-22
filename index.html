@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galaxy's Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --xp-blue-start: #0a246a;
+  --xp-blue-end: #3a6ea5;
+  --xp-titlebar-start: #0058e6;
+  --xp-titlebar-mid: #3a8cff;
+  --xp-titlebar-end: #0058e6;
+  --xp-titlebar-inactive: #7a96df;
+  --xp-button-face: #ece9d8;
+  --xp-button-highlight: #ffffff;
+  --xp-button-shadow: #aca899;
+  --xp-taskbar-start: #1f5fc4;
+  --xp-taskbar-end: #3478e3;
+  --xp-start-green-start: #3c8d2f;
+  --xp-start-green-end: #55b344;
+  --content-bg: #fff0f8;
+  --content-heading: #cc0077;
+  --content-text: #3a0030;
+  --content-border: #cc0077;
+}
+
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, Geneva, Verdana, sans-serif; }
+
+/* ===== MOBILE OVERLAY ===== */
+#mobile-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: #3a6ea5;
+  z-index: 99999;
+  align-items: center; justify-content: center;
+}
+@media (max-width: 768px) {
+  #mobile-overlay { display: flex; }
+}
+#mobile-overlay .mobile-box {
+  background: var(--xp-button-face);
+  border: 2px outset #fff;
+  padding: 30px 24px 20px;
+  text-align: center;
+  max-width: 320px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+}
+#mobile-overlay .mobile-box p {
+  font-family: Tahoma, sans-serif;
+  font-size: 13px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+#mobile-overlay .mobile-box .xp-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+/* ===== DESKTOP ===== */
+#desktop {
+  width: 100vw; height: 100vh;
+  background-image: url('me.png');
+  background-size: cover;
+  background-position: center top;
+  position: relative;
+  overflow: hidden;
+}
+#desktop-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.15);
+  pointer-events: none;
+  z-index: 0;
+}
+#desktop-icons {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.desktop-icon {
+  position: absolute;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 6px 4px;
+  border-radius: 3px;
+  cursor: grab;
+  user-select: none;
+  pointer-events: auto;
+}
+.desktop-icon.dragging { cursor: grabbing; opacity: 0.7; }
+.desktop-icon:hover { background: rgba(50,100,200,0.35); }
+.desktop-icon .icon-img { font-size: 36px; margin-bottom: 4px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5)); }
+.desktop-icon .icon-img img { width: 36px; height: 36px; object-fit: contain; }
+.desktop-icon .icon-label {
+  font-size: 11px; color: #fff;
+  text-shadow: 1px 1px 2px #000, 0 0 4px #000;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+/* ===== FACE CUTOUT ===== */
+#face-cutout {
+  position: fixed;
+  bottom: 30px; right: 20px;
+  width: 260px;
+  pointer-events: none;
+  z-index: 50;
+  image-rendering: auto;
+}
+
+/* ===== TASKBAR ===== */
+#taskbar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 36px;
+  background: linear-gradient(to bottom, #1f5fc4 0%, #2e71d0 4%, #3478e3 6%, #3c7fe8 8%, #2663c5 90%, #1d56b2 100%);
+  border-top: 1px solid #0c3c8c;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  padding: 0 2px;
+}
+#start-button {
+  height: 30px;
+  background: linear-gradient(to bottom, #3cad3a 0%, #3cad3a 3%, #46b344 50%, #329e2e 51%, #2d8e28 100%);
+  border: 1px outset #5ec85a;
+  border-radius: 0 8px 8px 0;
+  color: #fff;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0 12px 0 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.4);
+  letter-spacing: 0.5px;
+}
+#start-button:active, #start-button.open { filter: brightness(0.9); }
+#start-button .start-logo { font-size: 16px; }
+
+/* ===== START MENU ===== */
+#start-menu {
+  position: fixed;
+  bottom: 36px;
+  left: 0;
+  width: 280px;
+  background: #fff;
+  border: 2px solid #0055ea;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 4px -4px 16px rgba(0,0,0,0.4);
+  z-index: 70;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: startMenuIn 0.2s ease-out;
+}
+#start-menu.open { display: flex; }
+@keyframes startMenuIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+#start-menu .sm-header {
+  background: linear-gradient(to bottom, #0058e6 0%, #3a8cff 50%, #0052d6 100%);
+  color: #fff;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#start-menu .sm-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: url('me-thumb.png') center/cover #ccc;
+  border: 2px solid #fff;
+  flex-shrink: 0;
+}
+#start-menu .sm-items {
+  padding: 8px 4px;
+  background: #fff;
+}
+#start-menu .sm-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #000;
+  user-select: none;
+}
+#start-menu .sm-item:hover { background: linear-gradient(to bottom, #2a6fc5 0%, #2562b5 100%); color: #fff; }
+#start-menu .sm-item .sm-icon { font-size: 20px; flex-shrink: 0; }
+#start-menu .sm-divider { border-top: 1px solid #ddd; margin: 4px 8px; }
+#start-menu .sm-footer {
+  background: linear-gradient(to bottom, #4a8eda 0%, #3478c5 100%);
+  padding: 6px 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+#start-menu .sm-footer-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+#start-menu .sm-footer-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+
+#taskbar-windows {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0 6px;
+  overflow: hidden;
+}
+.taskbar-btn {
+  height: 26px;
+  min-width: 100px;
+  max-width: 180px;
+  background: linear-gradient(to bottom, #3a84da 0%, #2a6ec7 50%, #2562b5 100%);
+  border: 1px solid #1a4c99;
+  color: #fff;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+  padding: 0 8px;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.taskbar-btn:hover { background: linear-gradient(to bottom, #4a94ea 0%, #3a7ed7 50%, #3572c5 100%); }
+.taskbar-btn.active {
+  background: linear-gradient(to bottom, #1c54a5 0%, #1a4c99 50%, #163f80 100%);
+  border-style: inset;
+}
+.taskbar-btn.minimized { opacity: 0.6; }
+.taskbar-btn .tb-icon { font-size: 12px; }
+
+#taskbar-clock {
+  background: rgba(0,0,0,0.15);
+  border: 1px inset rgba(255,255,255,0.15);
+  color: #fff;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+  padding: 3px 10px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  white-space: nowrap;
+}
+
+/* ===== WINDOWS ===== */
+.xp-window {
+  position: absolute;
+  min-width: 320px;
+  background: var(--xp-button-face);
+  border: 2px solid #0055ea;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.xp-window.maximized {
+  top: 0 !important; left: 0 !important;
+  width: 100vw !important;
+  height: calc(100vh - 36px) !important;
+  border-radius: 0;
+}
+
+.xp-titlebar {
+  background: linear-gradient(to bottom, #0058e6 0%, #3a8cff 10%, #4d97ff 18%, #2a7fff 50%, #0f6af5 84%, #0052d6 100%);
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+  border-radius: 6px 6px 0 0;
+}
+.xp-window.maximized .xp-titlebar { border-radius: 0; }
+.xp-titlebar.inactive {
+  background: linear-gradient(to bottom, #7a96df 0%, #a0b8ef 10%, #b0c4f0 18%, #98b0e8 50%, #7090d8 84%, #6080c8 100%);
+}
+.xp-titlebar .tb-window-icon { font-size: 14px; margin-right: 4px; }
+.xp-titlebar .title-text {
+  flex: 1;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.titlebar-buttons {
+  display: flex;
+  gap: 2px;
+}
+.titlebar-btn {
+  width: 22px; height: 22px;
+  background: linear-gradient(to bottom, #fff 0%, #dfd8cb 45%, #c8c0b0 50%, #e8e0d4 100%);
+  border: 1px solid #999;
+  border-radius: 3px;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-weight: bold;
+  font-family: 'Marlett', Tahoma, sans-serif;
+}
+.titlebar-btn:hover { background: linear-gradient(to bottom, #fff 0%, #e8e0d8 45%, #d8d0c0 50%, #f0e8dc 100%); }
+.titlebar-btn:active { background: #c0b8a8; }
+.titlebar-btn.close-btn { background: linear-gradient(to bottom, #e88 0%, #d66 45%, #c44 50%, #e88 100%); color: #fff; }
+.titlebar-btn.close-btn:hover { background: linear-gradient(to bottom, #f99 0%, #e77 45%, #d55 50%, #f99 100%); }
+
+.xp-window-body {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+  border: 2px inset #b8b4a8;
+  margin: 0 3px 3px;
+}
+
+/* Folder view */
+.folder-view {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: #fff;
+}
+.folder-item {
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 6px 4px;
+  cursor: default;
+  border-radius: 3px;
+}
+.folder-item:hover { background: #e0e8f8; }
+.folder-item .file-icon { font-size: 32px; margin-bottom: 4px; }
+.folder-item .file-label { font-size: 11px; color: #000; line-height: 1.2; word-wrap: break-word; }
+
+/* File content view */
+.file-content {
+  background: var(--content-bg);
+  padding: 20px;
+  min-height: 100%;
+}
+.file-content h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: var(--content-heading);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.file-content p, .file-content ul {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: var(--content-text);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.file-content ul { padding-left: 22px; }
+.file-content li { margin-bottom: 4px; }
+.file-content .placeholder-note {
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: #999;
+  font-style: italic;
+}
+
+/* Image grid */
+.image-grid {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: var(--content-bg);
+}
+.image-grid.grid-2x2 { grid-template-columns: 1fr 1fr; }
+.image-grid.grid-2x3 { grid-template-columns: 1fr 1fr; }
+
+/* About Me combined page */
+.about-page { background: var(--content-bg); padding: 28px 28px 36px; font-family: 'VT323', monospace; }
+.about-page .about-header { text-align: center; margin-bottom: 28px; border-bottom: 2px solid var(--content-border); padding-bottom: 20px; }
+.about-page .about-header .about-name { font-family: 'Press Start 2P', cursive; font-size: 11px; color: var(--content-heading); line-height: 2; }
+.about-page .about-header .about-tagline { font-size: 20px; color: var(--content-text); margin-top: 6px; }
+.about-page .about-section { margin-bottom: 28px; }
+.about-page .about-section h3 { font-family: 'Press Start 2P', cursive; font-size: 8px; color: var(--content-heading); margin-bottom: 12px; line-height: 1.8; }
+.about-page .about-section p { font-size: 19px; color: var(--content-text); line-height: 1.5; margin-bottom: 8px; }
+.about-page .about-section em { color: #9900aa; font-style: normal; }
+.about-page .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.about-page .fact-card { background: #fff; border: 2px solid var(--content-border); padding: 10px 12px; font-size: 17px; color: var(--content-text); line-height: 1.4; }
+.about-page .fact-card .fact-num { font-family: 'Press Start 2P', cursive; font-size: 7px; color: var(--content-heading); display: block; margin-bottom: 5px; }
+.about-page .about-divider { border: none; border-top: 2px dashed var(--content-border); margin: 24px 0; }
+.about-page .about-gallery { height: 480px; border: 2px solid var(--content-border); }
+.about-page .about-gallery .cake-main { min-height: 0; }
+
+/* Product showcase window */
+.product-window { display: flex; flex-direction: column; height: 100%; }
+.product-header { background: #1a0028; padding: 18px 20px 14px; flex-shrink: 0; border-bottom: 2px solid var(--content-border); }
+.product-header .prod-icon { font-size: 32px; margin-bottom: 6px; }
+.product-header .prod-name { font-family: 'Press Start 2P', cursive; font-size: 10px; color: #ffb3ff; margin-bottom: 8px; line-height: 1.8; }
+.product-header .prod-tagline { font-family: 'VT323', monospace; font-size: 18px; color: #e0b3ff; margin-bottom: 12px; line-height: 1.4; }
+.product-header .prod-desc { font-family: 'VT323', monospace; font-size: 17px; color: #ccc; line-height: 1.5; margin-bottom: 12px; }
+.product-header .prod-note { font-family: 'VT323', monospace; font-size: 15px; color: #888; font-style: italic; line-height: 1.4; border-top: 1px dashed #444; padding-top: 8px; margin-top: 4px; }
+.product-header .prod-btn { display: inline-block; margin-top: 12px; padding: 6px 16px; background: none; border: 2px solid var(--content-border); color: #ffb3ff; font-family: 'VT323', monospace; font-size: 18px; cursor: pointer; }
+.product-header .prod-btn:hover { background: rgba(204,0,119,0.15); }
+.product-iframe { flex: 1; border: none; width: 100%; min-height: 0; background: #111; }
+.product-iframe-fallback { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #1a0028; font-family: 'VT323', monospace; font-size: 20px; color: #e0b3ff; text-align: center; gap: 12px; }
+.product-iframe-fallback .open-btn { padding: 8px 20px; background: none; border: 2px solid var(--content-border); color: #ffb3ff; font-family: 'VT323', monospace; font-size: 20px; cursor: pointer; }
+.product-iframe-fallback .open-btn:hover { background: rgba(204,0,119,0.15); }
+
+/* Bakery / cake gallery */
+.xp-window-body:has(> .cake-gallery) { overflow: hidden; padding: 0; display: flex; }
+.cake-gallery { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; background: var(--content-bg); }
+.cake-gallery .cake-main {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  background: #2a0020; padding: 16px; min-height: 0; position: relative;
+}
+.cake-gallery .cake-main img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  border: 2px solid var(--content-border);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.cake-gallery .cake-main .cake-empty {
+  font-family: 'VT323', monospace; font-size: 22px; color: #ffb3d9; text-align: center; line-height: 1.5;
+}
+.cake-gallery .cake-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.85); border: 2px solid var(--content-border);
+  width: 36px; height: 36px; cursor: pointer; font-size: 18px; font-weight: bold;
+  color: var(--content-heading); display: flex; align-items: center; justify-content: center;
+}
+.cake-gallery .cake-nav:hover { background: #fff; }
+.cake-gallery .cake-nav.prev { left: 12px; }
+.cake-gallery .cake-nav.next { right: 12px; }
+.cake-gallery .cake-caption {
+  font-family: 'VT323', monospace; font-size: 18px; color: var(--content-text);
+  text-align: center; padding: 8px 12px; background: var(--content-bg);
+  border-top: 2px solid var(--content-border);
+}
+.cake-gallery .cake-thumbs {
+  display: flex; gap: 6px; padding: 8px; background: #fff0f8;
+  border-top: 2px solid var(--content-border); overflow-x: auto; flex-shrink: 0;
+}
+.cake-gallery .cake-thumb {
+  width: 64px; height: 64px; flex-shrink: 0; cursor: pointer;
+  border: 2px solid #d8a8c8; background: #d0d0d0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'VT323', monospace; font-size: 11px; color: #888; overflow: hidden;
+}
+.cake-gallery .cake-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.cake-gallery .cake-thumb.active { border-color: var(--content-heading); box-shadow: 0 0 0 2px #ffb3d9; }
+.cake-gallery .cake-thumb:hover { border-color: var(--content-heading); }
+.image-grid .img-placeholder {
+  background: #d0d0d0;
+  border: 2px solid var(--content-border);
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: #666;
+}
+
+/* Cat pic view */
+.cat-pic-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: var(--content-bg);
+}
+.cat-pic-view .cat-img {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border: 2px solid var(--content-border);
+  background: #d0d0d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  color: #666;
+}
+.cat-pic-view img.cat-img { background: none; }
+.cat-pic-view .cat-caption {
+  margin-top: 12px;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  color: var(--content-text);
+  text-align: center;
+}
+
+/* WinAmp style */
+.winamp-view {
+  background: #1a1a2e;
+  padding: 16px;
+  min-height: 100%;
+  color: #ff69b4;
+  font-family: 'VT323', monospace;
+}
+.winamp-view .wa-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px;
+  color: #ff69b4;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.winamp-view .wa-display {
+  background: #0a0a1a;
+  border: 2px inset #333;
+  padding: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.spinning-disc {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 3px solid #ff69b4;
+  background: radial-gradient(circle, #333 30%, #1a1a2e 70%);
+  animation: spin 2s linear infinite;
+  flex-shrink: 0;
+  position: relative;
+}
+.spinning-disc::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 8px; height: 8px;
+  background: #ff69b4;
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.wa-now-playing { font-size: 18px; color: #00ff88; }
+.wa-tracklist { margin-top: 8px; }
+.wa-track {
+  font-size: 17px;
+  padding: 4px 6px;
+  color: #ff69b4;
+  border-bottom: 1px solid #222;
+}
+.wa-track:hover { background: rgba(255,105,180,0.1); }
+.wa-track.active { color: #00ff88; }
+
+/* Properties / About window */
+.properties-view {
+  background: var(--xp-button-face);
+  padding: 16px;
+}
+.properties-view p {
+  font-size: 12px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.properties-view .prop-label { font-weight: bold; }
+
+/* Contact form */
+.contact-view {
+  background: var(--content-bg);
+  padding: 20px;
+}
+.contact-view h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: var(--content-heading);
+  margin-bottom: 14px;
+}
+.contact-view label {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: var(--content-text);
+  display: block;
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+.contact-view input, .contact-view textarea {
+  width: 100%;
+  padding: 6px 8px;
+  font-family: 'VT323', monospace;
+  font-size: 17px;
+  border: 2px solid var(--content-border);
+  background: #fff;
+  outline: none;
+  border-radius: 0;
+}
+.contact-view textarea { height: 90px; resize: vertical; }
+.contact-view .send-btn {
+  margin-top: 14px;
+  background: var(--xp-button-face);
+  border: 2px outset #ddd;
+  padding: 6px 18px;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: var(--content-text);
+  cursor: pointer;
+}
+.contact-view .send-btn:active { border-style: inset; }
+
+/* ===== MINI BROWSER ===== */
+.browser-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  background: var(--xp-button-face);
+  border-bottom: 1px solid #b8b4a8;
+  flex-shrink: 0;
+}
+.browser-toolbar .nav-btn {
+  width: 24px; height: 22px;
+  background: linear-gradient(to bottom, #fff 0%, #e8e0d4 100%);
+  border: 1px solid #999;
+  border-radius: 2px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.browser-toolbar .nav-btn:hover { background: #f0ebe0; }
+.browser-toolbar .nav-btn:active { border-style: inset; }
+.browser-toolbar .url-bar {
+  flex: 1;
+  height: 22px;
+  padding: 0 6px;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+  border: 1px inset #b8b4a8;
+  background: #fff;
+  color: #333;
+  outline: none;
+  border-radius: 0;
+}
+.browser-frame {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.xp-window-body:has(.browser-frame) {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.browser-frame iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #fff;
+}
+.browser-fallback {
+  flex: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  background: #fff;
+  padding: 30px;
+  text-align: center;
+}
+.browser-fallback p {
+  font-family: Tahoma, sans-serif;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.6;
+}
+.browser-fallback a {
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: Tahoma, sans-serif;
+  font-size: 12px;
+}
+.browser-fallback .open-btn {
+  padding: 6px 18px;
+  background: var(--xp-button-face);
+  border: 2px outset #ddd;
+  font-family: Tahoma, sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.browser-fallback .open-btn:active { border-style: inset; }
+
+/* ===== CONTEXT MENU ===== */
+#context-menu {
+  position: absolute;
+  background: #fff;
+  border: 2px solid #888;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  z-index: 9000;
+  display: none;
+  min-width: 180px;
+  padding: 2px 0;
+  font-size: 12px;
+}
+#context-menu .ctx-item {
+  padding: 4px 24px 4px 24px;
+  cursor: default;
+  position: relative;
+  white-space: nowrap;
+}
+#context-menu .ctx-item:hover { background: #0a246a; color: #fff; }
+#context-menu .ctx-divider { border-top: 1px solid #ccc; margin: 2px 0; }
+#context-menu .ctx-submenu {
+  display: none;
+  position: absolute;
+  left: 100%; top: -2px;
+  background: #fff;
+  border: 2px solid #888;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  min-width: 150px;
+  padding: 2px 0;
+}
+#context-menu .ctx-item.has-sub:hover .ctx-submenu { display: block; }
+#context-menu .ctx-item.has-sub::after { content: '\u25B6'; position: absolute; right: 8px; font-size: 8px; top: 50%; transform: translateY(-50%); }
+#context-menu .ctx-submenu .ctx-item:hover { background: #0a246a; color: #fff; }
+
+/* ===== FAKE VIRUS POPUPS ===== */
+.fake-popup {
+  position: absolute;
+  width: 260px;
+  background: var(--xp-button-face);
+  border: 2px solid #0055ea;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+  animation: popupIn 0.25s ease-out;
+  overflow: hidden;
+}
+@keyframes popupIn {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.fake-popup .fp-titlebar {
+  background: linear-gradient(to bottom, #0058e6 0%, #3a8cff 10%, #4d97ff 18%, #2a7fff 50%, #0f6af5 84%, #0052d6 100%);
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  border-radius: 6px 6px 0 0;
+  cursor: move;
+  user-select: none;
+}
+.fake-popup .fp-titlebar .fp-icon { font-size: 11px; margin-right: 4px; }
+.fake-popup .fp-titlebar .fp-title {
+  flex: 1;
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+}
+.fake-popup .fp-titlebar .fp-close {
+  width: 16px; height: 16px;
+  background: linear-gradient(to bottom, #e88 0%, #d66 45%, #c44 50%, #e88 100%);
+  border: 1px solid #999;
+  border-radius: 2px;
+  font-size: 9px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  cursor: pointer;
+}
+.fake-popup .fp-close:hover { background: linear-gradient(to bottom, #f99 0%, #e77 45%, #d55 50%, #f99 100%); }
+.fake-popup .fp-body {
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.fake-popup .fp-warn { font-size: 24px; flex-shrink: 0; }
+.fake-popup .fp-msg {
+  font-size: 11px;
+  color: #000;
+  line-height: 1.5;
+}
+.fake-popup .fp-btnbar {
+  display: flex;
+  justify-content: center;
+  padding: 4px 14px 10px;
+}
+.fake-popup .fp-ok {
+  min-width: 70px;
+  padding: 3px 14px;
+  background: var(--xp-button-face);
+  border: 2px outset #ddd;
+  font-size: 11px;
+  cursor: pointer;
+}
+.fake-popup .fp-ok:active { border-style: inset; }
+
+/* ===== SPLASH / WIZARD ===== */
+#splash-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  bottom: 36px;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #245edb 0%, #3a6ea5 40%, #4a90d9 70%, #245edb 100%);
+}
+#splash-wizard {
+  background: var(--xp-button-face);
+  border: 2px solid #0055ea;
+  border-radius: 8px 8px 0 0;
+  width: 520px;
+  max-width: 94vw;
+  box-shadow: 4px 4px 16px rgba(0,0,0,0.5);
+  animation: wizardIn 0.45s ease-out;
+  display: none;
+  flex-direction: column;
+  z-index: 56;
+}
+@keyframes wizardIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+#splash-wizard .wizard-titlebar {
+  background: linear-gradient(to bottom, #0058e6 0%, #3a8cff 10%, #4d97ff 18%, #2a7fff 50%, #0f6af5 84%, #0052d6 100%);
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  border-radius: 6px 6px 0 0;
+}
+#splash-wizard .wizard-titlebar .wt-icon { font-size: 14px; margin-right: 6px; }
+#splash-wizard .wizard-titlebar .wt-title {
+  flex: 1; color: #fff; font-size: 12px; font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+}
+#splash-wizard .wizard-titlebar .wt-btns { display: flex; gap: 2px; }
+#splash-wizard .wizard-titlebar .wt-btn {
+  width: 20px; height: 20px;
+  background: linear-gradient(to bottom, #fff 0%, #dfd8cb 45%, #c8c0b0 50%, #e8e0d4 100%);
+  border: 1px solid #999;
+  border-radius: 3px;
+  font-size: 9px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #666;
+}
+#splash-wizard .wizard-titlebar .wt-btn.wt-close { background: linear-gradient(to bottom, #e88 0%, #d66 45%, #c44 50%, #e88 100%); color: #fff; }
+.wizard-body {
+  padding: 18px 20px 12px;
+  display: flex;
+  gap: 16px;
+}
+.wizard-thumb {
+  width: 90px; height: 100px;
+  flex-shrink: 0;
+  border: 2px solid #888;
+  background: url('me-thumb.png') center/cover no-repeat;
+  background-color: #d0d0d0;
+}
+.wizard-text { flex: 1; }
+.wizard-text .wt-heading {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  color: #003399;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+.shimmer {
+  background: linear-gradient(90deg, #003399 0%, #0066cc 50%, #003399 100%);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 2s ease-in-out infinite;
+}
+@keyframes shimmer { 0%,100%{background-position:0%} 50%{background-position:100%} }
+.wizard-text .wt-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #000;
+}
+.wizard-text .wt-body ul { padding-left: 18px; margin: 6px 0; }
+.wizard-text .wt-body li { margin-bottom: 2px; }
+.wizard-progress-area { padding: 4px 20px 12px; }
+.xp-progress {
+  width: 100%;
+  height: 20px;
+  background: #fff;
+  border: 1px solid #888;
+  overflow: hidden;
+  position: relative;
+}
+.xp-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: repeating-linear-gradient(90deg, #3b82f6 0px, #3b82f6 10px, #60a5fa 10px, #60a5fa 12px);
+  transition: width 2s ease-in-out;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.wizard-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 8px 20px 14px;
+  border-top: 1px solid #ccc;
+}
+.xp-btn {
+  min-width: 75px;
+  padding: 4px 12px;
+  background: var(--xp-button-face);
+  border: 2px outset #ddd;
+  font-family: Tahoma, sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+}
+.xp-btn:active { border-style: inset; }
+.xp-btn:hover { background: #f0ebe0; }
+
+/* ===== SHUTDOWN OVERLAY ===== */
+#shutdown-overlay {
+  position: fixed; inset: 0;
+  background: #000;
+  z-index: 90000;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+#shutdown-overlay .shutdown-text {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  color: #ff8800;
+  margin-bottom: 30px;
+  text-align: center;
+  line-height: 2;
+}
+#shutdown-overlay .go-back-btn {
+  padding: 8px 20px;
+  background: none;
+  border: 2px solid #ff8800;
+  color: #ff8800;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  cursor: pointer;
+}
+#shutdown-overlay .go-back-btn:hover { background: rgba(255,136,0,0.15); }
+
+/* scrollbar xp style */
+.xp-window-body::-webkit-scrollbar { width: 16px; }
+.xp-window-body::-webkit-scrollbar-track { background: #eee; border-left: 1px solid #ccc; }
+.xp-window-body::-webkit-scrollbar-thumb { background: linear-gradient(to right, #ccc, #aaa); border: 1px solid #888; }
+</style>
+</head>
+<body>
+
+<!-- MOBILE OVERLAY -->
+<div id="mobile-overlay">
+  <div class="mobile-box">
+    <div class="xp-icon">&#128187;</div>
+    <p>best experienced on desktop</p>
+    <p style="font-size:11px; color:#666;">this site simulates a Windows XP desktop and needs a wider screen to work properly</p>
+    <br>
+    <button class="xp-btn" onclick="document.getElementById('mobile-overlay').style.display='none'">OK</button>
+  </div>
+</div>
+
+<!-- SPLASH SCREEN -->
+<div id="splash-screen">
+  <div id="splash-wizard">
+    <div class="wizard-titlebar">
+      <span class="wt-icon">&#9888;&#65039;</span>
+      <span class="wt-title">welcome.exe</span>
+      <div class="wt-btns">
+        <div class="wt-btn">_</div>
+        <div class="wt-btn">&#9723;</div>
+        <div class="wt-btn wt-close" onclick="dismissSplash()">✕</div>
+      </div>
+    </div>
+    <div class="wizard-body">
+      <div class="wizard-thumb"></div>
+      <div class="wizard-text">
+        <div class="wt-heading">OH! So you clicked into my portfolio! <span class="shimmer">WELCOME!</span></div>
+        <div class="wt-body">
+          You've just entered <strong>Galaxy's</strong> desktop. Here's how this works:
+          <ul>
+            <li>Double-click any folder to open it</li>
+            <li>Click any file inside to view my work</li>
+            <li>Drag windows around to make it your own</li>
+            <li>Right-click the desktop for secret options</li>
+            <li>Close any window with the X button</li>
+          </ul>
+          Have fun snooping around. Stay as long as you want.
+        </div>
+      </div>
+    </div>
+    <div class="wizard-progress-area">
+      <div class="xp-progress"><div class="xp-progress-bar" id="splash-progress"></div></div>
+    </div>
+    <div class="wizard-buttons">
+      <button class="xp-btn" onclick="dismissSplash()">cancel</button>
+      <button class="xp-btn" disabled>back</button>
+      <button class="xp-btn" onclick="dismissSplash()">next &gt;</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESKTOP -->
+<div id="desktop">
+  <div id="desktop-overlay"></div>
+
+  <div id="desktop-icons">
+    <div class="desktop-icon" data-folder="hobbies" ondblclick="openFolder('hobbies')">
+      <div class="icon-img">&#127918;</div>
+      <div class="icon-label">hobbies</div>
+    </div>
+    <div class="desktop-icon" data-folder="about" ondblclick="openFolder('about')">
+      <div class="icon-img">&#128100;</div>
+      <div class="icon-label">about me</div>
+    </div>
+    <div class="desktop-icon" data-folder="photography" ondblclick="openFolder('photography')">
+      <div class="icon-img">&#128247;</div>
+      <div class="icon-label">photography</div>
+    </div>
+    <div class="desktop-icon" data-folder="music" ondblclick="openFolder('music')">
+      <div class="icon-img">&#127925;</div>
+      <div class="icon-label">music</div>
+    </div>
+    <div class="desktop-icon" data-folder="cats" ondblclick="openPuckShrine()">
+      <div class="icon-img">&#128008;</div>
+      <div class="icon-label">Puck's Shrine</div>
+    </div>
+    <div class="desktop-icon" ondblclick="openBrowser('LinkedIn', 'https://www.linkedin.com/in/galaxy-pham/', 'img:linkedin.png')">
+      <div class="icon-img"><img src="linkedin.png" alt="LinkedIn"></div>
+      <div class="icon-label">LinkedIn</div>
+    </div>
+    <div class="desktop-icon" ondblclick="openBrowser('Notion', 'https://galaxypham.notion.site/Galaxy-Pham-Portfolio-368f0caa384e80778c37ce382ee332d1?pvs=73', 'img:notion.png')">
+      <div class="icon-img"><img src="notion.png" alt="Notion"></div>
+      <div class="icon-label">Notion</div>
+    </div>
+    <div class="desktop-icon" ondblclick="openBrowser('GitHub', 'https://github.com/Galaxypham', 'img:github.png')">
+      <div class="icon-img"><img src="github.png" alt="GitHub"></div>
+      <div class="icon-label">GitHub</div>
+    </div>
+    <div class="desktop-icon" data-folder="roadmap" ondblclick="openRoadmap()">
+      <div class="icon-img">&#129517;</div>
+      <div class="icon-label">Roadmapping Tool</div>
+    </div>
+    <div class="desktop-icon" data-folder="racks" ondblclick="openRacks()">
+      <div class="icon-img">&#128087;</div>
+      <div class="icon-label">Racks</div>
+    </div>
+    <div class="desktop-icon" data-folder="bakery" ondblclick="openBakery()">
+      <div class="icon-img">&#127874;</div>
+      <div class="icon-label">my cakes</div>
+    </div>
+    <div class="desktop-icon" data-folder="recycle" ondblclick="return false;" oncontextmenu="showRecycleBinMenu(event)">
+      <div class="icon-img">&#128465;&#65039;</div>
+      <div class="icon-label">recycle bin</div>
+    </div>
+  </div>
+
+  <div id="windows-container"></div>
+
+  <img id="face-cutout" src="me-cutout.png" alt="" onerror="this.style.display='none'">
+</div>
+
+<!-- TASKBAR -->
+<div id="taskbar">
+  <button id="start-button" onclick="toggleStartMenu(event)"><span class="start-logo">&#127987;&#65039;</span> start</button>
+  <div id="taskbar-windows"></div>
+  <div id="taskbar-clock"></div>
+</div>
+
+<!-- CONTEXT MENU -->
+<!-- START MENU -->
+<div id="start-menu">
+  <div class="sm-header" onclick="openFolder('about');closeStartMenu()" style="cursor:pointer;" title="Open About Me">
+    <div class="sm-avatar"></div>
+    <div>Galaxy</div>
+  </div>
+  <div class="sm-items">
+    <div class="sm-item" onclick="showWelcomeAgain()">
+      <span class="sm-icon">&#128075;</span>
+      <span>Show welcome popup</span>
+    </div>
+    <div class="sm-item" onclick="resetIconLayout()">
+      <span class="sm-icon">&#128260;</span>
+      <span>Reset desktop layout</span>
+    </div>
+    <div class="sm-divider"></div>
+    <div class="sm-item" onclick="openAboutSite();closeStartMenu()">
+      <span class="sm-icon">&#128187;</span>
+      <span>About this site</span>
+    </div>
+  </div>
+  <div class="sm-footer">
+    <button class="sm-footer-btn" onclick="triggerShutdown();closeStartMenu()">
+      <span>&#9211;</span>
+      <span>Turn Off Computer</span>
+    </button>
+  </div>
+</div>
+
+<div id="context-menu">
+  <div class="ctx-item" onclick="openProperties()">properties</div>
+  <div class="ctx-divider"></div>
+  <div class="ctx-item" onclick="openAboutSite()">about this site</div>
+  <div class="ctx-item" onclick="window.open('#','_blank');hideContextMenu()">view source</div>
+  <div class="ctx-divider"></div>
+  <div class="ctx-item" onclick="triggerShutdown()">turn off computer</div>
+</div>
+
+<!-- RECYCLE BIN CONTEXT MENU -->
+<div id="recycle-menu" style="position:absolute;background:#fff;border:2px solid #888;box-shadow:2px 2px 4px rgba(0,0,0,0.3);z-index:9000;display:none;min-width:160px;padding:2px 0;font-size:12px;">
+  <div class="ctx-item" style="padding:4px 24px;cursor:default;" onmouseenter="this.style.background='#0a246a';this.style.color='#fff'" onmouseleave="this.style.background='';this.style.color=''" onclick="hideRecycleBinMenu(); alert('nothing in here... or is there? ;)')">open</div>
+  <div class="ctx-item" style="padding:4px 24px;cursor:default;" onmouseenter="this.style.background='#0a246a';this.style.color='#fff'" onmouseleave="this.style.background='';this.style.color=''" onclick="hideRecycleBinMenu(); alert('you can\'t empty what\'s already empty... just like my soul :(')">empty recycle bin</div>
+  <div style="border-top:1px solid #ccc;margin:2px 0;"></div>
+  <div class="ctx-item" style="padding:4px 24px;cursor:default;" onmouseenter="this.style.background='#0a246a';this.style.color='#fff'" onmouseleave="this.style.background='';this.style.color=''" onclick="hideRecycleBinMenu(); alert('properties: it\'s a bin. it recycles. what more do u want?')">properties</div>
+</div>
+
+<!-- SHUTDOWN OVERLAY -->
+<div id="shutdown-overlay">
+  <div class="shutdown-text">it is now safe to turn off<br>your computer</div>
+  <button class="go-back-btn" onclick="document.getElementById('shutdown-overlay').style.display='none'">just kidding, go back</button>
+</div>
+
+<script>
+/* ============================
+   DATA — folders and files
+   ============================ */
+const folderData = {
+  hobbies: {
+    title: 'C:/portfolio/hobbies/',
+    icon: '\uD83C\uDFAE',
+    type: 'under-construction'
+  },
+  about: {
+    title: 'about_me.exe',
+    icon: '\uD83D\uDC64',
+    type: 'about-combined'
+  },
+  photography: {
+    title: 'C:/portfolio/photography/',
+    icon: '\uD83D\uDCF7',
+    type: 'under-construction'
+  },
+  music: {
+    title: 'C:/portfolio/music/',
+    icon: '\uD83C\uDFB5',
+    type: 'under-construction'
+  },
+  cats: {
+    title: "C:/desktop/pucks-shrine/",
+    icon: '\uD83D\uDC08',
+    files: [
+      { name: 'sleepy_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat1.png', caption: "Puck doing what he does best \u2014 sleeping" },
+      { name: 'chaos_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat2.png', caption: "Puck causing chaos at 3am" },
+      { name: 'cute_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat3.png', caption: "Puck being unreasonably cute" },
+      { name: 'derp_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat4.png', caption: "puck.exe has stopped working" },
+      { name: 'monday_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat5.png', caption: "Puck on a monday mood" }
+    ]
+  }
+};
+
+/* ============================
+   WINDOW SYSTEM
+   ============================ */
+let windowIdCounter = 0;
+let topZ = 100;
+const openWindows = {};
+let offsetCounter = 0;
+
+function renderIcon(icon, size) {
+  if (!icon) return '\uD83D\uDCC4';
+  if (icon.startsWith('img:')) {
+    const src = icon.slice(4);
+    const s = size || 14;
+    return `<img src="${src}" style="width:${s}px;height:${s}px;object-fit:contain;vertical-align:middle;">`;
+  }
+  return icon;
+}
+
+function getNextOffset() {
+  offsetCounter++;
+  const base = 60 + (offsetCounter % 8) * 30;
+  return { x: base + Math.random() * 30, y: base + Math.random() * 20 };
+}
+
+function createWindow(title, icon, contentHTML, opts = {}) {
+  const id = 'win-' + (++windowIdCounter);
+  const off = getNextOffset();
+  const w = opts.width || 520;
+  const h = opts.height || 400;
+
+  const win = document.createElement('div');
+  win.className = 'xp-window';
+  win.id = id;
+  win.style.cssText = `left:${off.x}px;top:${off.y}px;width:${w}px;height:${h}px;z-index:${++topZ};`;
+
+  win.innerHTML = `
+    <div class="xp-titlebar" data-win="${id}">
+      <span class="tb-window-icon">${renderIcon(icon, 14)}</span>
+      <span class="title-text">${title}</span>
+      <div class="titlebar-buttons">
+        <button class="titlebar-btn" onclick="minimizeWindow('${id}')" title="Minimize">_</button>
+        <button class="titlebar-btn" onclick="maximizeWindow('${id}')" title="Maximize">&#9723;</button>
+        <button class="titlebar-btn close-btn" onclick="closeWindow('${id}')" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="xp-window-body">${contentHTML}</div>`;
+
+  document.getElementById('windows-container').appendChild(win);
+
+  openWindows[id] = { title, icon, el: win, minimized: false, maximized: false, prevStyle: null };
+  addTaskbarButton(id, title, icon);
+  makeDraggable(win);
+  focusWindow(id);
+  return id;
+}
+
+function focusWindow(id) {
+  const w = openWindows[id];
+  if (!w) return;
+  w.el.style.zIndex = ++topZ;
+  Object.keys(openWindows).forEach(k => {
+    const tb = openWindows[k].el.querySelector('.xp-titlebar');
+    if (k === id) { tb.classList.remove('inactive'); }
+    else { tb.classList.add('inactive'); }
+  });
+  updateTaskbarButtons();
+}
+
+function minimizeWindow(id) {
+  const w = openWindows[id];
+  if (!w) return;
+  w.minimized = true;
+  w.el.style.display = 'none';
+  updateTaskbarButtons();
+}
+
+function maximizeWindow(id) {
+  const w = openWindows[id];
+  if (!w) return;
+  if (w.maximized) {
+    w.el.classList.remove('maximized');
+    if (w.prevStyle) {
+      w.el.style.left = w.prevStyle.left;
+      w.el.style.top = w.prevStyle.top;
+      w.el.style.width = w.prevStyle.width;
+      w.el.style.height = w.prevStyle.height;
+    }
+    w.maximized = false;
+  } else {
+    w.prevStyle = { left: w.el.style.left, top: w.el.style.top, width: w.el.style.width, height: w.el.style.height };
+    w.el.classList.add('maximized');
+    w.maximized = true;
+  }
+  focusWindow(id);
+}
+
+function closeWindow(id) {
+  const w = openWindows[id];
+  if (!w) return;
+  w.el.remove();
+  delete openWindows[id];
+  removeTaskbarButton(id);
+}
+
+function toggleWindowFromTaskbar(id) {
+  const w = openWindows[id];
+  if (!w) return;
+  if (w.minimized) {
+    w.minimized = false;
+    w.el.style.display = 'flex';
+    focusWindow(id);
+  } else if (parseInt(w.el.style.zIndex) === topZ) {
+    minimizeWindow(id);
+  } else {
+    focusWindow(id);
+  }
+}
+
+/* Taskbar buttons */
+function addTaskbarButton(id, title, icon) {
+  const btn = document.createElement('button');
+  btn.className = 'taskbar-btn';
+  btn.id = 'tb-' + id;
+  btn.innerHTML = `<span class="tb-icon">${renderIcon(icon, 12)}</span>${title}`;
+  btn.onclick = () => toggleWindowFromTaskbar(id);
+  document.getElementById('taskbar-windows').appendChild(btn);
+}
+
+function removeTaskbarButton(id) {
+  const btn = document.getElementById('tb-' + id);
+  if (btn) btn.remove();
+}
+
+function updateTaskbarButtons() {
+  Object.keys(openWindows).forEach(id => {
+    const btn = document.getElementById('tb-' + id);
+    if (!btn) return;
+    const w = openWindows[id];
+    btn.classList.toggle('minimized', w.minimized);
+    btn.classList.toggle('active', parseInt(w.el.style.zIndex) === topZ && !w.minimized);
+  });
+}
+
+/* Dragging */
+function makeDraggable(win) {
+  let dragging = false, startX, startY, origX, origY;
+
+  win.addEventListener('mousedown', e => {
+    focusWindow(win.id);
+    if (e.target.closest('.titlebar-buttons')) return;
+    if (e.target.closest('.xp-window-body')) return;
+    const w = openWindows[win.id];
+    if (w && w.maximized) return;
+    dragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    origX = win.offsetLeft;
+    origY = win.offsetTop;
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    win.style.left = (origX + e.clientX - startX) + 'px';
+    win.style.top = (origY + e.clientY - startY) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => { dragging = false; });
+}
+
+/* ============================
+   CONTENT BUILDERS
+   ============================ */
+function buildImageGrid(type, label) {
+  const is2x3 = type === 'image-grid-2x3';
+  const count = is2x3 ? 6 : 4;
+  const cls = is2x3 ? 'grid-2x3' : 'grid-2x2';
+  const tag = is2x3 ? '[photo]' : '[image]';
+  let html = `<div class="image-grid ${cls}">`;
+  for (let i = 0; i < count; i++) html += `<div class="img-placeholder">${tag}</div>`;
+  html += '</div>';
+  return html;
+}
+
+function buildCatView(file) {
+  return `<div class="cat-pic-view">
+    <img class="cat-img" src="${file.img}" alt="${file.name}" onerror="this.outerHTML='<div class=\\'cat-img\\'>[cat pic goes here]</div>'">
+    <div class="cat-caption">${file.caption}</div>
+  </div>`;
+}
+
+function buildWinamp() {
+  const tracks = [
+    { name: '[Track 1 — Artist Name]', active: false },
+    { name: '[Track 2 — Artist Name]', active: true },
+    { name: '[Track 3 — Artist Name]', active: false },
+    { name: '[Track 4 — Artist Name]', active: false },
+    { name: '[Track 5 — Artist Name]', active: false },
+    { name: '[Track 6 — Artist Name]', active: false },
+    { name: '[Track 7 — Artist Name]', active: false },
+  ];
+  let html = `<div class="winamp-view">
+    <div class="wa-title">♪ now_playing.exe ♪</div>
+    <div class="wa-display">
+      <div class="spinning-disc"></div>
+      <div class="wa-now-playing">\u25B6 ${tracks[1].name}</div>
+    </div>
+    <div class="wa-tracklist">`;
+  tracks.forEach((t, i) => {
+    html += `<div class="wa-track${t.active ? ' active' : ''}">${String(i + 1).padStart(2, '0')}. ${t.name}</div>`;
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function buildFolderView(folderKey) {
+  const folder = folderData[folderKey];
+  let html = '<div class="folder-view">';
+  folder.files.forEach(f => {
+    html += `<div class="folder-item" ondblclick="openFile('${folderKey}','${f.name}')">
+      <div class="file-icon">${f.icon}</div>
+      <div class="file-label">${f.name}</div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function buildFileContent(file) {
+  if (file.type === 'text') return `<div class="file-content">${file.content}</div>`;
+  if (file.type === 'image-grid-2x2' || file.type === 'image-grid-2x3') return buildImageGrid(file.type);
+  if (file.type === 'cat') return buildCatView(file);
+  if (file.type === 'winamp') return buildWinamp();
+  return '<div class="file-content"><p>[content placeholder]</p></div>';
+}
+
+/* ============================
+   OPEN FOLDERS / FILES
+   ============================ */
+function openFolder(key) {
+  const folder = folderData[key];
+  if (!folder) return;
+  if (folder.type === 'under-construction') {
+    const html = `<div class="file-content" style="text-align:center;padding-top:40px;">
+      <div style="font-size:48px;margin-bottom:16px;">\uD83D\uDEA7</div>
+      <h2 style="margin-bottom:12px;">under construction</h2>
+      <p>check back soon!</p>
+    </div>`;
+    createWindow(folder.title, folder.icon, html, { width: 360, height: 240 });
+    return;
+  }
+  if (folder.type === 'about-combined') {
+    const winId = createWindow(folder.title, folder.icon, buildAboutPage(), { width: 680, height: 700 });
+    const win = document.getElementById(winId);
+    const mainImg = win.querySelector('.gallery-main-img');
+    const empty = win.querySelector('.about-gallery .cake-empty');
+    const caption = win.querySelector('.about-gallery .gallery-caption');
+    const thumbsEl = win.querySelector('.about-gallery .cake-thumbs');
+    let current = 0;
+    function showAbout(i) {
+      current = i;
+      mainImg.style.display = '';
+      empty.style.display = 'none';
+      mainImg.src = aboutPhotos[i].src;
+      caption.textContent = aboutPhotos[i].caption;
+      thumbsEl.querySelectorAll('.cake-thumb').forEach((t, idx) => t.classList.toggle('active', idx === i));
+    }
+    mainImg.addEventListener('error', () => { mainImg.style.display = 'none'; empty.style.display = 'block'; });
+    win.querySelector('.about-gallery .cake-nav.prev').addEventListener('click', () => showAbout((current - 1 + aboutPhotos.length) % aboutPhotos.length));
+    win.querySelector('.about-gallery .cake-nav.next').addEventListener('click', () => showAbout((current + 1) % aboutPhotos.length));
+    thumbsEl.querySelectorAll('.cake-thumb').forEach((t, i) => t.addEventListener('click', () => showAbout(i)));
+    showAbout(0);
+    return;
+  }
+  createWindow(folder.title, folder.icon, buildFolderView(key));
+}
+
+const aboutPhotos = [
+  { src: 'photos%20of%20me/finding%20the%20BIGGEST%20LEMON%20AND%20LIME.jpg', caption: 'finding the biggest lemon and lime \uD83C\uDF4B' },
+  { src: 'photos%20of%20me/first%20day%20as%20a%20Chef%20Instructor.jpg', caption: 'first day as a chef instructor \uD83D\uDC68\u200D\uD83C\uDF73' },
+  { src: 'photos%20of%20me/first%20day%20selling%20vintage%20.jpg', caption: 'first day selling vintage \uD83D\uDC9C' },
+  { src: 'photos%20of%20me/ISC%20WEST%202024.jpg', caption: 'ISC West 2024' },
+  { src: 'photos%20of%20me/ISC%20WEST%20Girlies.jpg', caption: 'ISC West girlies \uD83D\uDE4C' }
+];
+
+function buildAboutPage() {
+  const thumbs = aboutPhotos.map((p, i) => `
+    <div class="cake-thumb${i === 0 ? ' active' : ''}" data-i="${i}">
+      <img src="${p.src}" alt="${i + 1}" onerror="this.parentElement.style.background='#ddd'">
+    </div>`).join('');
+
+  return `<div class="about-page">
+    <div class="about-header">
+      <div class="about-name">\u2728 Galaxy Pham \u2728</div>
+      <div class="about-tagline">product builder \u00b7 professional chef \u00b7 founder of \u00e1o archive</div>
+    </div>
+
+    <div class="about-section">
+      <h3>\uD83D\uDC4B who am i</h3>
+      <p>Hi there! I\u2019m Galaxy, a product builder, fashion and vintage enthusiast, and professional chef. Yes, all three. Yes, at the same time.</p>
+      <p>I\u2019ve always been obsessed with learning how things work. Growing up, I had <em>Unwrapped</em> and <em>How It\u2019s Made</em> on repeat. I was that kid. Looking back, it makes total sense: I build operational products for a living, I cook at a professional level, and I run my own vintage resell business called <em>\u00e1o archive</em>. They\u2019re all deeply process-driven, and I love that about them.</p>
+      <p>I made this portfolio to bring all of my worlds together: the professional stuff, the creative stuff, and everything in between. Thanks for snooping around. Stay as long as you\u2019d like. \u2728</p>
+    </div>
+
+    <hr class="about-divider">
+
+    <div class="about-section">
+      <h3>\uD83D\uDCF8 photos</h3>
+      <div class="cake-gallery about-gallery">
+        <div class="cake-main">
+          <button class="cake-nav prev" type="button" title="Previous">\u2039</button>
+          <img class="gallery-main-img" alt="">
+          <div class="cake-empty" style="display:none;">photos coming soon \u2728</div>
+          <button class="cake-nav next" type="button" title="Next">\u203A</button>
+        </div>
+        <div class="cake-caption gallery-caption"></div>
+        <div class="cake-thumbs">${thumbs}</div>
+      </div>
+    </div>
+
+    <hr class="about-divider">
+
+    <div class="about-section">
+      <h3>\u2728 fun facts</h3>
+      <div class="facts-grid">
+        <div class="fact-card"><span class="fact-num">01</span>I am an introverted extrovert. I will be the life of the party and then need three business days to recover.</div>
+        <div class="fact-card"><span class="fact-num">02</span>Fish sauce in tomato sauce spaghetti is genuinely one of the best things I have ever made. Very Viet of me, and I stand by it.</div>
+        <div class="fact-card"><span class="fact-num">03</span>I once found a mint condition AllSaints leather bag at a Savers for $16. Retail: $400. This is what \u00e1o archive is built on.</div>
+        <div class="fact-card"><span class="fact-num">04</span>Racks was the first app I ever built entirely by myself. Very proud of that one.</div>
+        <div class="fact-card"><span class="fact-num">05</span>I was eating sardines before the 2025 craze. I\u2019m not NOT saying I\u2019m a trendsetter.</div>
+        <div class="fact-card"><span class="fact-num">06</span>Bucket list: visit sardine canning factories in Portugal. Yes, this is a real goal. Yes, I am serious.</div>
+        <div class="fact-card"><span class="fact-num">07</span>Hot take: corn should be on everything. This is not up for debate.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function openFile(folderKey, fileName) {
+  const folder = folderData[folderKey];
+  if (!folder) return;
+  const file = folder.files.find(f => f.name === fileName);
+  if (!file) return;
+  const title = folder.title + fileName;
+  const opts = file.type === 'winamp' ? { width: 380, height: 360 } : {};
+  createWindow(title, file.icon, buildFileContent(file), opts);
+}
+
+/* ============================
+   PRODUCT SHOWCASE
+   ============================ */
+function openRacks() {
+  const url = 'https://galaxypham.github.io/racks/';
+  const html = `<div class="product-window">
+    <div class="product-header">
+      <div class="prod-icon">&#128087;</div>
+      <div class="prod-name">Racks</div>
+      <div class="prod-tagline">inventory management + analytics for vintage resellers</div>
+      <div class="prod-desc">
+        Vintage is uniquely hard to track: every item is a one-of-a-kind SKU, and when you\u2019re managing hundreds or thousands of pieces, knowing what sells, what\u2019s sitting stale, and what to restock becomes nearly impossible without the right tooling.<br><br>
+        Racks solves that. It uses Gemini AI to help categorize and organize inventory automatically, and gives resellers real data on their stock so they can make smarter buying and selling decisions.
+      </div>
+      <div class="prod-note">Note: this is the MVP I built myself. Racks has since been rewritten to scale by my co-founder Tiffany, who architected the full backend. This is my personal build.</div>
+      <button class="prod-btn" onclick="window.open('${url}','_blank')">\u2197 open in new tab</button>
+    </div>
+  </div>`;
+  createWindow('Racks \u2014 Vintage Inventory App', '&#128087;', html, { width: 580, height: 440 });
+}
+
+function openRoadmap() {
+  const url = 'https://roadmapping-tool-seven.vercel.app/welcome';
+  const html = `<div class="product-window">
+    <div class="product-header">
+      <div class="prod-icon">&#129517;</div>
+      <div class="prod-name">Roadmapping Tool</div>
+      <div class="prod-tagline">product intake + roadmapping system</div>
+      <div class="prod-desc">
+        A product intake and roadmapping system built to make the full request pipeline visible and traceable, so nothing falls through the cracks and no one has to side-channel engineering just to get heard.<br><br>
+        I built the original version of this internally at Meta. Requests came in from everywhere, priorities shifted quietly, and teams had no single source of truth for what was actually being worked on or why. This tool was built to fix that.<br><br>
+        This is not a replica of the internal tool. I rebuilt it as an open template so other product people facing the same problems can fork the repo and make their own version.
+      </div>
+      <div class="prod-note">Note: this is a template, not the original internal tool. If you are a PM or ops person dealing with the same intake chaos, feel free to use the repo and make it your own.</div>
+      <button class="prod-btn" onclick="window.open('${url}','_blank')">\u2197 open in new tab</button>
+    </div>
+  </div>`;
+  createWindow('Roadmapping Tool', '&#128506;', html, { width: 580, height: 460 });
+}
+
+/* ============================
+   BAKERY / CAKE GALLERY
+   ============================ */
+const cakePhotos = [
+  { src: 'Cake%20Photos/bear%20cake.jpg', caption: 'bear cake \uD83D\uDC3B' },
+  { src: 'Cake%20Photos/Brewster%20Cake.jpg', caption: 'brewster cake' },
+  { src: 'Cake%20Photos/cookie%20cake.jpg', caption: 'cookie cake \uD83C\uDF6A' },
+  { src: 'Cake%20Photos/frog%20cake.JPG', caption: 'frog cake \uD83D\uDC38' },
+  { src: 'Cake%20Photos/garden%20shrek%20cake.jpg', caption: 'garden shrek cake \uD83C\uDF31' },
+  { src: 'Cake%20Photos/pumpkin%20cake.jpg', caption: 'pumpkin cake \uD83C\uDF83' },
+  { src: 'Cake%20Photos/sculpture%20cake.jpg', caption: 'sculpture cake' },
+  { src: 'Cake%20Photos/Tiffany%20Cake.jpg', caption: 'tiffany cake \uD83D\uDC8E' },
+  { src: 'Cake%20Photos/xmas%20cake.jpg', caption: 'xmas cake \uD83C\uDF84' }
+];
+
+function openBakery() {
+  openGallery({
+    title: "Galaxy's Bakery \u2014 Cake Gallery",
+    icon: '\uD83C\uDF82',
+    photos: cakePhotos,
+    emptyMsg: "\uD83C\uDF82 your cakes will live here \uD83C\uDF82"
+  });
+}
+
+const puckPhotos = [
+  { src: "Puck's%20Photos/puck.jpg", caption: 'puck \uD83D\uDC08' },
+  { src: "Puck's%20Photos/Puckbubu.jpg", caption: 'puck bubu' },
+  { src: "Puck's%20Photos/monch.jpg", caption: 'monch time' },
+  { src: "Puck's%20Photos/yee%20haw.jpg", caption: 'yee haw \uD83E\uDD20' },
+  { src: "Puck's%20Photos/nastiest%20boy.jpg", caption: 'nastiest boy' },
+  { src: "Puck's%20Photos/cat%20or%20turkey.jpg", caption: 'cat or turkey?' },
+  { src: "Puck's%20Photos/first%20business%20venture.JPG", caption: 'first business venture' },
+  { src: "Puck's%20Photos/water%20Puck.jpg", caption: 'water puck \uD83D\uDCA7' },
+  { src: "Puck's%20Photos/after%20a%20long%20day.jpg", caption: 'after a long day' }
+];
+
+function openPuckShrine() {
+  openGallery({
+    title: "Puck's Shrine \u2014 Photo Gallery",
+    icon: '\uD83D\uDC08',
+    photos: puckPhotos,
+    emptyMsg: "\uD83D\uDC08 puck's photos will live here \uD83D\uDC08"
+  });
+}
+
+function openGallery(cfg) {
+  const photos = cfg.photos;
+  const html = `<div class="cake-gallery">
+    <div class="cake-main">
+      <button class="cake-nav prev" type="button" title="Previous">\u2039</button>
+      <img class="gallery-main-img" alt="">
+      <div class="cake-empty" style="display:none;">${cfg.emptyMsg || 'photos will live here'}</div>
+      <button class="cake-nav next" type="button" title="Next">\u203A</button>
+    </div>
+    <div class="cake-caption gallery-caption"></div>
+    <div class="cake-thumbs"></div>
+  </div>`;
+
+  const winId = createWindow(cfg.title, cfg.icon, html, { width: 620, height: 540 });
+  const win = document.getElementById(winId);
+  const mainImg = win.querySelector('.gallery-main-img');
+  const empty = win.querySelector('.cake-empty');
+  const caption = win.querySelector('.gallery-caption');
+  const thumbsEl = win.querySelector('.cake-thumbs');
+  let current = 0;
+
+  function show(i) {
+    current = i;
+    mainImg.style.display = '';
+    empty.style.display = 'none';
+    mainImg.src = photos[i].src;
+    caption.textContent = photos[i].caption;
+    thumbsEl.querySelectorAll('.cake-thumb').forEach((t, idx) => {
+      t.classList.toggle('active', idx === i);
+    });
+  }
+  function nav(dir) {
+    show((current + dir + photos.length) % photos.length);
+  }
+
+  mainImg.addEventListener('error', () => {
+    mainImg.style.display = 'none';
+    empty.style.display = 'block';
+  });
+  win.querySelector('.cake-nav.prev').addEventListener('click', () => nav(-1));
+  win.querySelector('.cake-nav.next').addEventListener('click', () => nav(1));
+
+  photos.forEach((p, i) => {
+    const t = document.createElement('div');
+    t.className = 'cake-thumb' + (i === 0 ? ' active' : '');
+    const img = document.createElement('img');
+    img.src = p.src;
+    img.alt = String(i + 1);
+    img.addEventListener('error', () => {
+      const span = document.createElement('span');
+      span.textContent = '[' + (i + 1) + ']';
+      img.replaceWith(span);
+    });
+    t.appendChild(img);
+    t.addEventListener('click', () => show(i));
+    thumbsEl.appendChild(t);
+  });
+
+  show(0);
+}
+
+/* ============================
+   BROWSER WINDOWS
+   ============================ */
+function openBrowser(name, url, icon) {
+  const html = `<div class="browser-frame">
+    <div class="browser-toolbar">
+      <button class="nav-btn" onclick="window.open('${url}','_blank')" title="Open in new tab">\u2197</button>
+      <input class="url-bar" value="${url}" readonly>
+      <button class="nav-btn" onclick="window.open('${url}','_blank')" title="Open in new tab">\u2197</button>
+    </div>
+    <div class="browser-fallback" style="display:flex;">
+      <div style="font-size:48px;margin-bottom:4px;">\u2728</div>
+      <p style="font-size:14px;font-weight:bold;color:#cc0077;">psst... ${name} is too cool for an embedded window</p>
+      <p>click the button below to open it in a shiny new tab \u2728</p>
+      <button class="open-btn" onclick="window.open('${url}','_blank')">take me to ${name} \u2192</button>
+    </div>
+  </div>`;
+  createWindow(name + ' - Internet Explorer', icon, html, { width: 540, height: 360 });
+}
+
+/* ============================
+   CONTEXT MENU
+   ============================ */
+const ctxMenu = document.getElementById('context-menu');
+
+document.getElementById('desktop').addEventListener('contextmenu', e => {
+  if (e.target.closest('.xp-window') || e.target.closest('#taskbar') || e.target.closest('.desktop-icon[data-folder="recycle"]')) return;
+  e.preventDefault();
+  ctxMenu.style.display = 'block';
+  ctxMenu.style.left = '0px';
+  ctxMenu.style.top = '0px';
+  const rect = ctxMenu.getBoundingClientRect();
+  const margin = 8;
+  let x = e.clientX, y = e.clientY;
+  if (x + rect.width + margin > window.innerWidth) x = e.clientX - rect.width;
+  if (y + rect.height + margin > window.innerHeight) y = e.clientY - rect.height;
+  x = Math.max(margin, x);
+  y = Math.max(margin, y);
+  ctxMenu.style.left = x + 'px';
+  ctxMenu.style.top = y + 'px';
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#context-menu')) hideContextMenu();
+  if (!e.target.closest('#recycle-menu')) hideRecycleBinMenu();
+});
+
+function hideContextMenu() { ctxMenu.style.display = 'none'; }
+
+function blinkClose() {
+  ctxMenu.style.opacity = '0.5';
+  setTimeout(() => { ctxMenu.style.opacity = '1'; hideContextMenu(); }, 120);
+}
+
+function showRecycleBinMenu(e) {
+  e.preventDefault();
+  const menu = document.getElementById('recycle-menu');
+  menu.style.display = 'block';
+  menu.style.left = '0px';
+  menu.style.top = '0px';
+  const rect = menu.getBoundingClientRect();
+  const margin = 8;
+  let x = e.clientX, y = e.clientY;
+  if (x + rect.width + margin > window.innerWidth) x = e.clientX - rect.width;
+  if (y + rect.height + margin > window.innerHeight) y = e.clientY - rect.height;
+  x = Math.max(margin, x);
+  y = Math.max(margin, y);
+  menu.style.left = x + 'px';
+  menu.style.top = y + 'px';
+}
+function hideRecycleBinMenu() { document.getElementById('recycle-menu').style.display = 'none'; }
+
+/* Context menu actions */
+function openProperties() {
+  hideContextMenu();
+  createWindow('Desktop Properties', '\uD83D\uDDA5\uFE0F',
+    `<div class="properties-view">
+      <p><span class="prop-label">Name:</span> Galaxy</p>
+      <p><span class="prop-label">site version:</span> v1.0</p>
+      <p><span class="prop-label">resolution:</span> ${window.innerWidth} x ${window.innerHeight}</p>
+      <p><span class="prop-label">vibe:</span> immaculate</p>
+    </div>`, { width: 320, height: 240 });
+}
+
+function openAboutSite() {
+  hideContextMenu();
+  createWindow('About This Site', '\uD83D\uDCBB',
+    `<div class="file-content">
+      <h2>about this site</h2>
+      <p>This is Galaxy's portfolio, built to look and feel like a Windows XP desktop.</p>
+      <p>everything here is a window — folders open into explorers, files open into content viewers, and you can drag everything around.</p>
+      <p>built with vanilla HTML, CSS, and JS. no frameworks, no libraries, just vibes.</p>
+    </div>`, { width: 440, height: 280 });
+}
+
+function triggerShutdown() {
+  hideContextMenu();
+  document.getElementById('shutdown-overlay').style.display = 'flex';
+}
+
+/* ============================
+   SPLASH SCREEN
+   ============================ */
+const fakePopups = [
+  { title: 'virus.exe', msg: 'WARNING: too much talent detected on this machine' },
+  { title: 'error.dll', msg: 'CRITICAL: cuteness levels exceeding safe limits' },
+  { title: 'alert.bat', msg: 'your computer has been infected with... my portfolio' },
+  { title: 'uh_oh.exe', msg: 'ERROR 404: boring personality not found' },
+  { title: 'warning.sys', msg: 'system overload: this person is too cool' },
+  { title: 'panic.exe', msg: 'FATAL: hire this person immediately' }
+];
+
+let fakePopupZ = 55;
+
+function getFixedPositions() {
+  const sw = window.innerWidth;
+  const sh = window.innerHeight - 36;
+  const cx = (sw - 520) / 2, cy = (sh - 400) / 2;
+  return [
+    { x: Math.max(10, cx - 290), y: Math.max(10, cy - 30), rot: -2 },
+    { x: Math.min(sw - 270, cx + 540), y: Math.max(10, cy + 20), rot: 3 },
+    { x: Math.max(10, cx - 200), y: Math.max(10, cy - 140), rot: 1 },
+    { x: Math.min(sw - 270, cx + 460), y: Math.min(sh - 140, cy + 320), rot: -1.5 },
+    { x: Math.max(10, cx - 100), y: Math.min(sh - 140, cy + 380), rot: 2.5 },
+    { x: Math.min(sw - 270, cx + 560), y: Math.max(10, cy - 100), rot: -2.5 }
+  ];
+}
+
+function spawnFakePopup(data, index) {
+  const splash = document.getElementById('splash-screen');
+  const el = document.createElement('div');
+  el.className = 'fake-popup';
+  const pos = getFixedPositions()[index];
+  el.style.cssText = `left:${pos.x}px;top:${pos.y}px;z-index:${++fakePopupZ};transform:rotate(${pos.rot}deg);`;
+  el.innerHTML = `<div class="fp-titlebar"><span class="fp-icon">\u26a0\ufe0f</span><span class="fp-title">${data.title}</span><span class="fp-close">\u2715</span></div><div class="fp-body"><span class="fp-warn">\u26a0\ufe0f</span><span class="fp-msg">${data.msg}</span></div><div class="fp-btnbar"><button class="fp-ok">OK</button></div>`;
+
+  el.querySelector('.fp-close').addEventListener('click', () => el.remove());
+  el.querySelector('.fp-ok').addEventListener('click', () => el.remove());
+
+  el.addEventListener('mousedown', () => { el.style.zIndex = ++fakePopupZ; });
+
+  const tb = el.querySelector('.fp-titlebar');
+  let dragging = false, sx, sy, ox, oy;
+  tb.addEventListener('mousedown', e => {
+    if (e.target.closest('.fp-close')) return;
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    ox = el.offsetLeft; oy = el.offsetTop;
+    el.style.transform = 'rotate(0deg)';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    el.style.left = (ox + e.clientX - sx) + 'px';
+    el.style.top = (oy + e.clientY - sy) + 'px';
+  });
+  document.addEventListener('mouseup', () => { dragging = false; });
+
+  splash.appendChild(el);
+}
+
+function dismissSplash() {
+  const splash = document.getElementById('splash-screen');
+  splash.querySelectorAll('.fake-popup').forEach(p => p.remove());
+  splash.style.transition = 'opacity 0.3s';
+  splash.style.opacity = '0';
+  setTimeout(() => splash.style.display = 'none', 300);
+}
+
+/* ============================
+   START MENU
+   ============================ */
+function toggleStartMenu(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('start-menu');
+  const btn = document.getElementById('start-button');
+  if (menu.classList.contains('open')) {
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+  } else {
+    menu.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeStartMenu() {
+  document.getElementById('start-menu').classList.remove('open');
+  document.getElementById('start-button').classList.remove('open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#start-menu') && !e.target.closest('#start-button')) {
+    closeStartMenu();
+  }
+});
+
+function resetIconLayout() {
+  localStorage.removeItem('iconPositions');
+  document.querySelectorAll('.desktop-icon').forEach(el => el.remove());
+  closeStartMenu();
+  location.reload();
+}
+
+function showWelcomeAgain() {
+  closeStartMenu();
+  const splash = document.getElementById('splash-screen');
+  splash.querySelectorAll('.fake-popup').forEach(p => p.remove());
+  splash.style.display = 'flex';
+  splash.style.opacity = '0';
+  splash.style.transition = 'opacity 0.3s';
+  requestAnimationFrame(() => { splash.style.opacity = '1'; });
+  const wizard = document.getElementById('splash-wizard');
+  wizard.style.display = 'none';
+  const bar = document.getElementById('splash-progress');
+  bar.style.width = '0%';
+
+  fakePopups.forEach((popup, i) => {
+    setTimeout(() => spawnFakePopup(popup, i), 300 + i * 350);
+  });
+
+  setTimeout(() => {
+    wizard.style.display = 'flex';
+    setTimeout(() => { bar.style.width = '100%'; }, 100);
+  }, 2800);
+}
+
+fakePopups.forEach((popup, i) => {
+  setTimeout(() => spawnFakePopup(popup, i), 300 + i * 350);
+});
+
+setTimeout(() => {
+  document.getElementById('splash-wizard').style.display = 'flex';
+  setTimeout(() => {
+    document.getElementById('splash-progress').style.width = '100%';
+  }, 100);
+}, 2800);
+
+/* ============================
+   DRAGGABLE DESKTOP ICONS
+   ============================ */
+function initDesktopIcons() {
+  const ICON_LAYOUT_VERSION = 'v9';
+  if (localStorage.getItem('iconLayoutVersion') !== ICON_LAYOUT_VERSION) {
+    localStorage.removeItem('iconPositions');
+    localStorage.setItem('iconLayoutVersion', ICON_LAYOUT_VERSION);
+  }
+  const icons = document.querySelectorAll('.desktop-icon');
+  const saved = JSON.parse(localStorage.getItem('iconPositions') || '{}');
+  const rightX = Math.max(window.innerWidth - 96, 200);
+  const bottomY = Math.max(window.innerHeight - 160, 400);
+  const defaults = {
+    about: { x: 16, y: 16 },
+    cats: { x: 16, y: 108 },
+    photography: { x: 16, y: 200 },
+    hobbies: { x: 16, y: 292 },
+    music: { x: 16, y: 384 },
+    bakery: { x: 16, y: 476 },
+    racks: { x: 16, y: 568 },
+    roadmap: { x: 16, y: 660 },
+    LinkedIn: { x: rightX, y: 16 },
+    Notion: { x: rightX, y: 108 },
+    GitHub: { x: rightX, y: 200 },
+    recycle: { x: rightX, y: bottomY }
+  };
+
+  icons.forEach((icon, i) => {
+    const key = (icon.dataset.folder || icon.querySelector('.icon-label').textContent.trim()).replace(/\s+/g, '_');
+    icon.dataset.key = key;
+
+    if (saved[key]) {
+      icon.style.left = saved[key].x + 'px';
+      icon.style.top = saved[key].y + 'px';
+    } else if (defaults[key]) {
+      icon.style.left = defaults[key].x + 'px';
+      icon.style.top = defaults[key].y + 'px';
+    } else {
+      icon.style.left = (16 + Math.floor(i / 8) * 96) + 'px';
+      icon.style.top = (16 + (i % 8) * 92) + 'px';
+    }
+
+    let dragging = false, moved = false, sx, sy, ox, oy;
+    icon.addEventListener('mousedown', e => {
+      if (e.button !== 0) return;
+      dragging = true;
+      moved = false;
+      sx = e.clientX; sy = e.clientY;
+      ox = icon.offsetLeft; oy = icon.offsetTop;
+      icon.style.zIndex = 10;
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        moved = true;
+        icon.classList.add('dragging');
+      }
+      if (moved) {
+        const newX = Math.max(0, Math.min(window.innerWidth - 80, ox + dx));
+        const newY = Math.max(0, Math.min(window.innerHeight - 130, oy + dy));
+        icon.style.left = newX + 'px';
+        icon.style.top = newY + 'px';
+      }
+    });
+    document.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      icon.classList.remove('dragging');
+      icon.style.zIndex = 5;
+      if (moved) {
+        const positions = JSON.parse(localStorage.getItem('iconPositions') || '{}');
+        positions[key] = { x: icon.offsetLeft, y: icon.offsetTop };
+        localStorage.setItem('iconPositions', JSON.stringify(positions));
+      }
+    });
+
+    icon.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); } }, true);
+  });
+}
+initDesktopIcons();
+
+/* ============================
+   CLOCK
+   ============================ */
+function updateClock() {
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  m = String(m).padStart(2, '0');
+  document.getElementById('taskbar-clock').textContent = `${h}:${m} ${ampm}`;
+}
+updateClock();
+setInterval(updateClock, 10000);
+
+/* ============================
+   PREVENT DEFAULT CONTEXT ON NON-DESKTOP
+   ============================ */
+document.addEventListener('contextmenu', e => {
+  if (e.target.closest('.xp-window') || e.target.closest('#taskbar')) return;
+});
+</script>
+</body>
+</html>
