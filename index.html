@@ -31,33 +31,141 @@
 html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, Geneva, Verdana, sans-serif; }
 
 /* ===== MOBILE OVERLAY ===== */
+/* ===== MOBILE PAGE ===== */
 #mobile-overlay {
   display: none;
   position: fixed; inset: 0;
-  background: #3a6ea5;
+  background: #1a0028;
   z-index: 99999;
-  align-items: center; justify-content: center;
+  overflow-y: auto;
+  flex-direction: column;
 }
 @media (max-width: 768px) {
   #mobile-overlay { display: flex; }
 }
-#mobile-overlay .mobile-box {
-  background: var(--xp-button-face);
-  border: 2px outset #fff;
-  padding: 30px 24px 20px;
+.mob { font-family: 'VT323', monospace; color: #fff0f8; }
+.mob-header {
+  background: linear-gradient(135deg, #1a0028 0%, #3a0050 100%);
+  padding: 40px 24px 28px;
   text-align: center;
-  max-width: 320px;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+  border-bottom: 2px solid #cc0077;
+  flex-shrink: 0;
 }
-#mobile-overlay .mobile-box p {
-  font-family: Tahoma, sans-serif;
-  font-size: 13px;
-  margin-bottom: 18px;
-  line-height: 1.5;
+.mob-header .mob-name {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 13px; color: #ffb3ff;
+  line-height: 2; margin-bottom: 8px;
 }
-#mobile-overlay .mobile-box .xp-icon {
-  font-size: 32px;
+.mob-header .mob-tagline {
+  font-family: 'VT323', monospace;
+  font-size: 20px; color: #e0b3ff;
+}
+.mob-header .mob-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: url('me-thumb.png') center/cover #3a0050;
+  border: 3px solid #cc0077;
+  margin: 0 auto 16px;
+}
+.mob-section {
+  padding: 24px 20px;
+  border-bottom: 2px dashed #44006a;
+}
+.mob-section h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px; color: #cc0077;
+  margin-bottom: 14px; line-height: 1.8;
+}
+.mob-section p {
+  font-family: 'VT323', monospace;
+  font-size: 19px; color: #fff0f8;
+  line-height: 1.5; margin-bottom: 8px;
+}
+.mob-section em { color: #ffb3ff; font-style: normal; }
+.mob-facts { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.mob-fact {
+  background: rgba(204,0,119,0.1);
+  border: 1px solid #cc0077;
+  padding: 8px 12px;
+  font-family: 'VT323', monospace;
+  font-size: 17px; color: #fff0f8;
+  line-height: 1.4;
+}
+.mob-fact span {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 6px; color: #cc0077;
+  display: block; margin-bottom: 4px;
+}
+.mob-card {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid #cc0077;
+  padding: 14px 16px;
   margin-bottom: 12px;
+}
+.mob-card .mc-icon { font-size: 28px; margin-bottom: 6px; }
+.mob-card .mc-name {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px; color: #ffb3ff;
+  margin-bottom: 8px; line-height: 1.8;
+}
+.mob-card .mc-desc {
+  font-family: 'VT323', monospace;
+  font-size: 17px; color: #ccc;
+  line-height: 1.4; margin-bottom: 10px;
+}
+.mob-card .mc-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  background: none;
+  border: 2px solid #cc0077;
+  color: #ffb3ff;
+  font-family: 'VT323', monospace;
+  font-size: 18px; cursor: pointer;
+  text-decoration: none;
+}
+.mob-card .mc-btn:hover { background: rgba(204,0,119,0.2); }
+.mob-gallery { display: flex; flex-direction: column; gap: 0; }
+.mob-gallery-main {
+  width: 100%; aspect-ratio: 4/3;
+  object-fit: cover;
+  border: 2px solid #cc0077;
+  background: #2a0020;
+  display: block;
+}
+.mob-gallery-thumbs {
+  display: flex; gap: 6px;
+  overflow-x: auto; padding: 8px 0;
+}
+.mob-gallery-thumbs img {
+  width: 60px; height: 60px;
+  object-fit: cover;
+  border: 2px solid #44006a;
+  cursor: pointer; flex-shrink: 0;
+}
+.mob-gallery-thumbs img.active { border-color: #cc0077; }
+.mob-gallery-caption {
+  font-family: 'VT323', monospace;
+  font-size: 17px; color: #e0b3ff;
+  padding: 6px 0; text-align: center;
+}
+.mob-links { display: flex; flex-direction: column; gap: 10px; padding-bottom: 40px; }
+.mob-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid #cc0077;
+  color: #ffb3ff;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  text-decoration: none;
+}
+.mob-link img { width: 24px; height: 24px; object-fit: contain; }
+.mob-link:hover { background: rgba(204,0,119,0.15); }
+.mob-nav-hint {
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px; color: #66336a;
+  padding: 16px; line-height: 2;
 }
 
 /* ===== DESKTOP ===== */
@@ -983,13 +1091,92 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
 
 <!-- MOBILE OVERLAY -->
 <div id="mobile-overlay">
-  <div class="mobile-box">
-    <div class="xp-icon">&#128187;</div>
-    <p>best experienced on desktop</p>
-    <p style="font-size:11px; color:#666;">this site simulates a Windows XP desktop and needs a wider screen to work properly</p>
-    <br>
-    <button class="xp-btn" onclick="document.getElementById('mobile-overlay').style.display='none'">OK</button>
+  <!-- HEADER -->
+  <div class="mob-header">
+    <div class="mob-avatar"></div>
+    <div class="mob-name">Galaxy Pham</div>
+    <div class="mob-tagline">product builder &middot; professional chef &middot; founder of &aacute;o archive</div>
   </div>
+
+  <!-- ABOUT -->
+  <div class="mob-section">
+    <h2>&#128075; about me</h2>
+    <p>Hi there! I&rsquo;m Galaxy, a product builder, fashion and vintage enthusiast, and professional chef. Yes, all three. Yes, at the same time.</p>
+    <p>I&rsquo;ve always been obsessed with learning how things work. Growing up, I had <em>Unwrapped</em> and <em>How It&rsquo;s Made</em> on repeat. I was that kid. Looking back, it makes total sense: I build operational products for a living, I cook at a professional level, and I run my own vintage resell business called <em>&aacute;o archive</em>. They&rsquo;re all deeply process-driven, and I love that about them.</p>
+  </div>
+
+  <!-- FUN FACTS -->
+  <div class="mob-section">
+    <h2>&#10024; fun facts</h2>
+    <div class="mob-facts">
+      <div class="mob-fact"><span>01</span>I am an introverted extrovert. I will be the life of the party and then need three business days to recover.</div>
+      <div class="mob-fact"><span>02</span>Fish sauce in tomato sauce spaghetti is genuinely one of the best things I have ever made. Very Viet of me, and I stand by it.</div>
+      <div class="mob-fact"><span>03</span>I once found a mint condition AllSaints leather bag at a Savers for $16. Retail: $400. This is what &aacute;o archive is built on.</div>
+      <div class="mob-fact"><span>04</span>Racks was the first app I ever built entirely by myself. Very proud of that one.</div>
+      <div class="mob-fact"><span>05</span>I was eating sardines before the 2025 craze. I&rsquo;m not NOT saying I&rsquo;m a trendsetter.</div>
+      <div class="mob-fact"><span>06</span>Bucket list: visit sardine canning factories in Portugal. Yes, this is a real goal. Yes, I am serious.</div>
+      <div class="mob-fact"><span>07</span>Hot take: corn should be on everything. This is not up for debate.</div>
+    </div>
+  </div>
+
+  <!-- PHOTOS OF ME -->
+  <div class="mob-section">
+    <h2>&#128248; photos</h2>
+    <div class="mob-gallery">
+      <img class="mob-gallery-main" id="mob-me-main" src="photos%20of%20me/finding%20the%20BIGGEST%20LEMON%20AND%20LIME.jpg" alt="photo">
+      <div class="mob-gallery-caption" id="mob-me-caption">finding the biggest lemon and lime &#127819;</div>
+      <div class="mob-gallery-thumbs" id="mob-me-thumbs"></div>
+    </div>
+  </div>
+
+  <!-- MY WORK -->
+  <div class="mob-section">
+    <h2>&#128640; my work</h2>
+    <div class="mob-card">
+      <div class="mc-icon">&#128087;</div>
+      <div class="mc-name">Racks</div>
+      <div class="mc-desc">Inventory management and analytics for vintage resellers, powered by Gemini AI.</div>
+      <a class="mc-btn" href="https://galaxypham.github.io/racks/" target="_blank">open Racks &#8594;</a>
+    </div>
+    <div class="mob-card">
+      <div class="mc-icon">&#129517;</div>
+      <div class="mc-name">Roadmapping Tool</div>
+      <div class="mc-desc">A product intake and roadmapping system built to make the full request pipeline visible and traceable.</div>
+      <a class="mc-btn" href="https://roadmapping-tool-seven.vercel.app/welcome" target="_blank">open tool &#8594;</a>
+    </div>
+  </div>
+
+  <!-- CAKES -->
+  <div class="mob-section">
+    <h2>&#127874; my cakes</h2>
+    <div class="mob-gallery" id="mob-cake-gallery">
+      <img class="mob-gallery-main" id="mob-cake-main" src="Cake%20Photos/bear%20cake.jpg" alt="cake">
+      <div class="mob-gallery-caption" id="mob-cake-caption">bear cake &#127867;</div>
+      <div class="mob-gallery-thumbs" id="mob-cake-thumbs"></div>
+    </div>
+  </div>
+
+  <!-- PUCK -->
+  <div class="mob-section">
+    <h2>&#128008; puck&rsquo;s shrine</h2>
+    <div class="mob-gallery" id="mob-puck-gallery">
+      <img class="mob-gallery-main" id="mob-puck-main" src="Puck%27s%20Photos/puck.jpg" alt="puck">
+      <div class="mob-gallery-caption" id="mob-puck-caption">puck &#128008;</div>
+      <div class="mob-gallery-thumbs" id="mob-puck-thumbs"></div>
+    </div>
+  </div>
+
+  <!-- LINKS -->
+  <div class="mob-section">
+    <h2>&#127758; find me</h2>
+    <div class="mob-links">
+      <a class="mob-link" href="https://www.linkedin.com/in/galaxy-pham/" target="_blank"><img src="linkedin.png" alt="LinkedIn"> LinkedIn</a>
+      <a class="mob-link" href="https://github.com/Galaxypham" target="_blank"><img src="github.png" alt="GitHub"> GitHub</a>
+      <a class="mob-link" href="https://galaxypham.notion.site/Galaxy-Pham-Portfolio-368f0caa384e80778c37ce382ee332d1?pvs=73" target="_blank"><img src="notion.png" alt="Notion"> Notion</a>
+    </div>
+  </div>
+
+  <div class="mob-nav-hint">best experienced on desktop for the full Windows XP experience &#128187;</div>
 </div>
 
 <!-- SPLASH SCREEN -->
@@ -1428,6 +1615,14 @@ function buildFileContent(file) {
 /* ============================
    OPEN FOLDERS / FILES
    ============================ */
+const aboutPhotos = [
+  { src: 'photos%20of%20me/finding%20the%20BIGGEST%20LEMON%20AND%20LIME.jpg', caption: 'finding the biggest lemon and lime \uD83C\uDF4B' },
+  { src: 'photos%20of%20me/first%20day%20as%20a%20Chef%20Instructor.jpg', caption: 'first day as a chef instructor \uD83D\uDC68\u200D\uD83C\uDF73' },
+  { src: 'photos%20of%20me/first%20day%20selling%20vintage%20.jpg', caption: 'first day selling vintage \uD83D\uDC9C' },
+  { src: 'photos%20of%20me/ISC%20WEST%202024.jpg', caption: 'ISC West 2024' },
+  { src: 'photos%20of%20me/ISC%20WEST%20Girlies.jpg', caption: 'ISC West girlies \uD83D\uDE4C' }
+];
+
 function openFolder(key) {
   const folder = folderData[key];
   if (!folder) return;
@@ -1466,13 +1661,6 @@ function openFolder(key) {
   createWindow(folder.title, folder.icon, buildFolderView(key));
 }
 
-const aboutPhotos = [
-  { src: 'photos%20of%20me/finding%20the%20BIGGEST%20LEMON%20AND%20LIME.jpg', caption: 'finding the biggest lemon and lime \uD83C\uDF4B' },
-  { src: 'photos%20of%20me/first%20day%20as%20a%20Chef%20Instructor.jpg', caption: 'first day as a chef instructor \uD83D\uDC68\u200D\uD83C\uDF73' },
-  { src: 'photos%20of%20me/first%20day%20selling%20vintage%20.jpg', caption: 'first day selling vintage \uD83D\uDC9C' },
-  { src: 'photos%20of%20me/ISC%20WEST%202024.jpg', caption: 'ISC West 2024' },
-  { src: 'photos%20of%20me/ISC%20WEST%20Girlies.jpg', caption: 'ISC West girlies \uD83D\uDE4C' }
-];
 
 function buildAboutPage() {
   const thumbs = aboutPhotos.map((p, i) => `
@@ -2023,6 +2211,49 @@ setInterval(updateClock, 10000);
 document.addEventListener('contextmenu', e => {
   if (e.target.closest('.xp-window') || e.target.closest('#taskbar')) return;
 });
+
+/* ============================
+   MOBILE GALLERIES
+   ============================ */
+function initMobileGallery(photos, mainId, captionId, thumbsId) {
+  const main = document.getElementById(mainId);
+  const caption = document.getElementById(captionId);
+  const thumbsEl = document.getElementById(thumbsId);
+  if (!main || !thumbsEl) return;
+  let current = 0;
+
+  function show(i) {
+    current = i;
+    main.src = photos[i].src;
+    caption.textContent = photos[i].caption;
+    thumbsEl.querySelectorAll('img').forEach((t, idx) => t.classList.toggle('active', idx === i));
+    thumbsEl.querySelectorAll('img')[i]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  photos.forEach((p, i) => {
+    const img = document.createElement('img');
+    img.src = p.src;
+    img.alt = String(i + 1);
+    if (i === 0) img.classList.add('active');
+    img.addEventListener('click', () => show(i));
+    thumbsEl.appendChild(img);
+  });
+
+  let touchStartX = 0;
+  main.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  main.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      show((current + (diff > 0 ? 1 : -1) + photos.length) % photos.length);
+    }
+  }, { passive: true });
+}
+
+if (window.innerWidth <= 768) {
+  initMobileGallery(aboutPhotos, 'mob-me-main', 'mob-me-caption', 'mob-me-thumbs');
+  initMobileGallery(cakePhotos, 'mob-cake-main', 'mob-cake-caption', 'mob-cake-thumbs');
+  initMobileGallery(puckPhotos, 'mob-puck-main', 'mob-puck-caption', 'mob-puck-thumbs');
+}
 </script>
 </body>
 </html>
