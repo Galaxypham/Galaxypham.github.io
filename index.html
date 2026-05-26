@@ -163,21 +163,29 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 4px 0;
+  padding: 8px 0 4px;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 .mob-gallery-thumbs::-webkit-scrollbar { display: none; }
 .mob-gallery-thumbs img {
-  width: 56px; height: 56px;
+  width: 72px; height: 72px;
   object-fit: cover;
-  border-radius: 4px;
-  border: 2px solid transparent;
+  border-radius: 6px;
+  border: 2px solid #e4e4e4;
   cursor: pointer;
   flex-shrink: 0;
-  opacity: 0.6;
+  opacity: 0.7;
   transition: all 0.15s;
 }
-.mob-gallery-thumbs img.active { border-color: #cc0077; opacity: 1; }
+.mob-gallery-thumbs img.active { border-color: #cc0077; opacity: 1; box-shadow: 0 2px 8px rgba(204,0,119,0.25); }
+.mob-gallery-hint {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  margin-top: 4px;
+  letter-spacing: 0.3px;
+}
 
 .mob-links {
   display: flex;
@@ -1180,6 +1188,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
       <img class="mob-gallery-main" id="mob-cake-main" src="Cake%20Photos/bear%20cake.jpg" alt="cake">
       <div class="mob-gallery-caption" id="mob-cake-caption">bear cake</div>
       <div class="mob-gallery-thumbs" id="mob-cake-thumbs"></div>
+      <div class="mob-gallery-hint">tap a thumbnail or swipe the photo to browse</div>
     </div>
   </section>
 
@@ -2459,9 +2468,7 @@ function initMobileGallery(photos, mainId, captionId, thumbsId) {
   }, { passive: true });
 }
 
-if (window.innerWidth <= 768) {
-  initMobileGallery(cakePhotos, 'mob-cake-main', 'mob-cake-caption', 'mob-cake-thumbs');
-}
+initMobileGallery(cakePhotos, 'mob-cake-main', 'mob-cake-caption', 'mob-cake-thumbs');
 </script>
 </body>
 </html>
