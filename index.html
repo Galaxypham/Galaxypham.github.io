@@ -2405,15 +2405,17 @@ const topTracks = [
 function openMusic() {
   const total = topTracks.length;
 
-  // Render all iframes up front so playback state survives navigation
-  const embeds = topTracks.map((t, i) => `
-    <div class="music-track" data-idx="${i}" style="${i === 0 ? '' : 'display:none;'}">
-      <iframe
-        src="https://open.spotify.com/embed/track/${t.spotifyId}?utm_source=generator&theme=0"
+  // Render a single iframe and swap its src on track change.
+  // (Rendering all 5 embeds at once causes Spotify's player to lock up
+  //  because hidden iframes keep stale audio sessions alive.)
+  const embeds = `
+    <div class="music-track" data-idx="0">
+      <iframe id="music-iframe"
+        src="https://open.spotify.com/embed/track/${topTracks[0].spotifyId}?utm_source=generator&theme=0"
         width="100%" height="152" frameborder="0"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"></iframe>
-    </div>`).join('');
+    </div>`;
 
   const trackTabs = topTracks.map((_, i) =>
     `<button class="music-tab${i === 0 ? ' active' : ''}" data-idx="${i}">TRK_${String(i + 1).padStart(2, '0')}</button>`
@@ -2454,14 +2456,16 @@ function openMusic() {
   const win = document.getElementById(winId);
 
   let current = 0;
-  const tracks  = win.querySelectorAll('.music-track');
+  const iframe = win.querySelector('#music-iframe');
   const tabs    = win.querySelectorAll('.music-tab');
   const counter = win.querySelector('.music-counter-num');
 
   function show(i) {
-    current = (i + total) % total;
-    tracks.forEach((t, idx) => { t.style.display = idx === current ? '' : 'none'; });
-    tabs.forEach((t, idx)   => t.classList.toggle('active', idx === current));
+    const next = (i + total) % total;
+    if (next === current) return;
+    current = next;
+    iframe.src = `https://open.spotify.com/embed/track/${topTracks[current].spotifyId}?utm_source=generator&theme=0`;
+    tabs.forEach((t, idx) => t.classList.toggle('active', idx === current));
     counter.textContent = String(current + 1).padStart(2, '0');
   }
 
