@@ -24,7 +24,7 @@
   --xp-start-green-end: #55b344;
   --content-bg: #fff0f8;
   --content-heading: #cc0077;
-  --content-text: #3a0030;
+  --content-text: #260020;
   --content-border: #cc0077;
 }
 
@@ -527,29 +527,29 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
 /* File content view */
 .file-content {
   background: var(--content-bg);
-  padding: 20px;
+  padding: 24px 26px;
   min-height: 100%;
 }
 .file-content h2 {
   font-family: 'Press Start 2P', cursive;
-  font-size: 8px;
+  font-size: 13px;
   color: var(--content-heading);
-  margin-bottom: 14px;
-  line-height: 1.5;
+  margin-bottom: 18px;
+  line-height: 1.6;
 }
 .file-content p, .file-content ul {
   font-family: 'VT323', monospace;
-  font-size: 18px;
+  font-size: 22px;
   color: var(--content-text);
   line-height: 1.5;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
-.file-content ul { padding-left: 22px; }
-.file-content li { margin-bottom: 4px; }
+.file-content ul { padding-left: 26px; }
+.file-content li { margin-bottom: 6px; }
 .file-content .placeholder-note {
   font-family: 'VT323', monospace;
-  font-size: 16px;
-  color: #999;
+  font-size: 19px;
+  color: #888;
   font-style: italic;
 }
 
@@ -564,35 +564,508 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
 .image-grid.grid-2x3 { grid-template-columns: 1fr 1fr; }
 
 /* About Me combined page */
-.about-page { background: var(--content-bg); padding: 28px 28px 36px; font-family: 'VT323', monospace; }
-.about-page .about-header { text-align: center; margin-bottom: 28px; border-bottom: 2px solid var(--content-border); padding-bottom: 20px; }
-.about-page .about-header .about-name { font-family: 'Press Start 2P', cursive; font-size: 11px; color: var(--content-heading); line-height: 2; }
-.about-page .about-header .about-tagline { font-size: 20px; color: var(--content-text); margin-top: 6px; }
-.about-page .about-section { margin-bottom: 28px; }
-.about-page .about-section h3 { font-family: 'Press Start 2P', cursive; font-size: 8px; color: var(--content-heading); margin-bottom: 12px; line-height: 1.8; }
-.about-page .about-section p { font-size: 19px; color: var(--content-text); line-height: 1.5; margin-bottom: 8px; }
-.about-page .about-section em { color: #9900aa; font-style: normal; }
-.about-page .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.about-page .fact-card { background: #fff; border: 2px solid var(--content-border); padding: 10px 12px; font-size: 17px; color: var(--content-text); line-height: 1.4; }
-.about-page .fact-card .fact-num { font-family: 'Press Start 2P', cursive; font-size: 7px; color: var(--content-heading); display: block; margin-bottom: 5px; }
-.about-page .about-divider { border: none; border-top: 2px dashed var(--content-border); margin: 24px 0; }
-.about-page .about-gallery { height: 480px; border: 2px solid var(--content-border); }
+.about-page { background: var(--content-bg); padding: 32px 32px 40px; font-family: 'VT323', monospace; }
+.about-page .about-header { text-align: center; margin-bottom: 32px; border-bottom: 2px solid var(--content-border); padding-bottom: 24px; }
+.about-page .about-header .about-name { font-family: 'Press Start 2P', cursive; font-size: 16px; color: var(--content-heading); line-height: 2; }
+.about-page .about-header .about-tagline { font-size: 24px; color: var(--content-text); margin-top: 10px; line-height: 1.4; }
+.about-page .about-section { margin-bottom: 32px; }
+.about-page .about-section h3 { font-family: 'Press Start 2P', cursive; font-size: 13px; color: var(--content-heading); margin-bottom: 16px; line-height: 1.8; }
+.about-page .about-section p { font-size: 22px; color: var(--content-text); line-height: 1.5; margin-bottom: 10px; }
+.about-page .about-section em { color: #8a0066; font-style: normal; font-weight: bold; }
+.about-page .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.about-page .fact-card { background: #fff; border: 2px solid var(--content-border); padding: 14px 16px; font-size: 21px; color: var(--content-text); line-height: 1.4; }
+.about-page .fact-card .fact-num { font-family: 'Press Start 2P', cursive; font-size: 11px; color: var(--content-heading); display: block; margin-bottom: 8px; }
+.about-page .about-divider { border: none; border-top: 2px dashed var(--content-border); margin: 28px 0; }
+.about-page .about-gallery { height: 500px; border: 2px solid var(--content-border); }
 .about-page .about-gallery .cake-main { min-height: 0; }
 
 /* Product showcase window */
-.product-window { display: flex; flex-direction: column; height: 100%; }
-.product-header { background: #1a0028; padding: 18px 20px 14px; flex-shrink: 0; border-bottom: 2px solid var(--content-border); }
-.product-header .prod-icon { font-size: 32px; margin-bottom: 6px; }
-.product-header .prod-name { font-family: 'Press Start 2P', cursive; font-size: 10px; color: #ffb3ff; margin-bottom: 8px; line-height: 1.8; }
-.product-header .prod-tagline { font-family: 'VT323', monospace; font-size: 18px; color: #e0b3ff; margin-bottom: 12px; line-height: 1.4; }
-.product-header .prod-desc { font-family: 'VT323', monospace; font-size: 17px; color: #ccc; line-height: 1.5; margin-bottom: 12px; }
-.product-header .prod-note { font-family: 'VT323', monospace; font-size: 15px; color: #888; font-style: italic; line-height: 1.4; border-top: 1px dashed #444; padding-top: 8px; margin-top: 4px; }
-.product-header .prod-btn { display: inline-block; margin-top: 12px; padding: 6px 16px; background: none; border: 2px solid var(--content-border); color: #ffb3ff; font-family: 'VT323', monospace; font-size: 18px; cursor: pointer; }
+.xp-window-body:has(> .product-window) { padding: 0; background: #1a0028; overflow: auto; }
+.product-window {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: #1a0028;
+}
+.product-header { background: #1a0028; padding: 22px 24px 18px; flex-shrink: 0; }
+.product-header .prod-icon { font-size: 36px; margin-bottom: 10px; }
+.product-header .prod-name { font-family: 'Press Start 2P', cursive; font-size: 14px; color: #ffb3ff; margin-bottom: 12px; line-height: 1.8; }
+.product-header .prod-tagline { font-family: 'VT323', monospace; font-size: 22px; color: #e0b3ff; margin-bottom: 16px; line-height: 1.4; }
+.product-header .prod-desc { font-family: 'VT323', monospace; font-size: 21px; color: #e8d8e8; line-height: 1.55; margin-bottom: 16px; }
+.product-header .prod-note { font-family: 'VT323', monospace; font-size: 19px; color: #a89aa8; font-style: italic; line-height: 1.45; border-top: 1px dashed #444; padding-top: 12px; margin-top: 6px; }
+.product-header .prod-btn { display: inline-block; margin-top: 16px; padding: 8px 20px; background: none; border: 2px solid var(--content-border); color: #ffb3ff; font-family: 'VT323', monospace; font-size: 22px; letter-spacing: 0.5px; cursor: pointer; transition: all 0.15s; }
+.product-header .prod-btn:hover { background: rgba(204,0,119,0.18); box-shadow: 0 0 12px rgba(204,0,119,0.4); }
 .product-header .prod-btn:hover { background: rgba(204,0,119,0.15); }
 .product-iframe { flex: 1; border: none; width: 100%; min-height: 0; background: #111; }
 .product-iframe-fallback { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #1a0028; font-family: 'VT323', monospace; font-size: 20px; color: #e0b3ff; text-align: center; gap: 12px; }
 .product-iframe-fallback .open-btn { padding: 8px 20px; background: none; border: 2px solid var(--content-border); color: #ffb3ff; font-family: 'VT323', monospace; font-size: 20px; cursor: pointer; }
 .product-iframe-fallback .open-btn:hover { background: rgba(204,0,119,0.15); }
+
+/* Arcade / Hobbies */
+.xp-window-body:has(.arcade-root) { padding: 0; background: #050510; overflow: auto; }
+.arcade-root { min-height: 100%; }
+.arcade-fadeout { animation: arcadeFade 0.22s ease forwards; }
+@keyframes arcadeFade {
+  to { opacity: 0; transform: scale(0.98); filter: blur(2px); }
+}
+
+/* ---- Menu (mode select) screen ---- */
+.arcade-menu-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  animation: arcadeIn 0.3s ease;
+}
+@keyframes arcadeIn {
+  from { opacity: 0; transform: scale(1.02); }
+  to { opacity: 1; transform: scale(1); }
+}
+.arcade-menu-prompt {
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  color: #ffeb3b;
+  letter-spacing: 1.5px;
+  margin: 12px 0 28px;
+  line-height: 1.8;
+  animation: arcadeBlink 1.2s infinite;
+}
+@keyframes arcadeBlink { 0%,49%{opacity:1} 50%,100%{opacity:0.45} }
+.arcade-menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 12px;
+  flex: 1;
+  justify-content: center;
+}
+.arcade-menu-btn {
+  background: #0a0a18;
+  border: 2px solid var(--neon);
+  color: var(--neon);
+  padding: 22px 18px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+  text-align: center;
+  position: relative;
+  transition: all 0.18s;
+  box-shadow: 0 0 0 transparent, inset 0 0 0 transparent;
+}
+.arcade-menu-btn:hover {
+  background: #12122a;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--neon) 55%, transparent),
+              inset 0 0 14px color-mix(in srgb, var(--neon) 20%, transparent);
+  transform: translateY(-2px);
+}
+.arcade-menu-btn:active { transform: translateY(0); }
+.amb-players {
+  font-size: 32px;
+  color: var(--neon);
+  text-shadow: 0 0 8px var(--neon);
+  margin-bottom: 4px;
+  letter-spacing: 8px;
+}
+.amb-num {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  color: #fff;
+  text-shadow: 0 0 6px var(--neon);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.amb-sub {
+  font-size: 16px;
+  color: #aaa;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.amb-cta {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: var(--neon);
+  letter-spacing: 1.5px;
+  animation: arcadeBlink 1s infinite;
+}
+
+/* ---- List (selected mode) screen ---- */
+.arcade-list-screen { animation: arcadeIn 0.3s ease; }
+.arcade-list-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed #2a2a44;
+}
+.arcade-back-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: var(--neon);
+  background: transparent;
+  border: 1.5px solid var(--neon);
+  padding: 6px 10px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+}
+.arcade-back-btn:hover {
+  background: var(--neon);
+  color: #050510;
+  box-shadow: 0 0 10px var(--neon);
+}
+.arcade-list-mode {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  color: var(--neon);
+  text-shadow: 0 0 6px var(--neon);
+  letter-spacing: 1.5px;
+  margin-left: auto;
+}
+.arcade-app {
+  background:
+    repeating-linear-gradient(0deg, rgba(0,255,240,0.025) 0px, rgba(0,255,240,0.025) 1px, transparent 1px, transparent 3px),
+    radial-gradient(ellipse at top, #1a0030 0%, #050510 70%);
+  min-height: 100%;
+  padding: 22px 18px 28px;
+  color: #f0f0ff;
+  font-family: 'VT323', monospace;
+}
+.arcade-header { text-align: center; margin-bottom: 22px; }
+.arcade-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  color: #ffeb3b;
+  text-shadow: 0 0 8px rgba(255,235,59,0.7), 0 0 16px rgba(255,235,59,0.4);
+  letter-spacing: 1px;
+  line-height: 1.8;
+  margin-bottom: 8px;
+  animation: arcadeFlicker 4s infinite;
+}
+@keyframes arcadeFlicker {
+  0%,97%,100% { opacity: 1; }
+  98% { opacity: 0.85; }
+  99% { opacity: 1; }
+}
+.arcade-subtitle {
+  font-size: 15px;
+  color: #888;
+  letter-spacing: 1px;
+}
+.arcade-cabinet { margin-bottom: 26px; }
+.arcade-cabinet-header {
+  border-top: 2px solid var(--neon);
+  border-bottom: 2px solid var(--neon);
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--neon) 30%, transparent), inset 0 0 8px color-mix(in srgb, var(--neon) 10%, transparent);
+}
+.arcade-cab-label {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  color: var(--neon);
+  text-shadow: 0 0 6px var(--neon);
+  display: block;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.arcade-cab-sub {
+  font-size: 16px;
+  color: #aaa;
+  font-style: italic;
+}
+.arcade-cards { display: flex; flex-direction: column; gap: 12px; }
+.arcade-card {
+  display: flex;
+  gap: 12px;
+  background: #0a0a18;
+  border: 2px solid #2a2a44;
+  padding: 12px;
+  transition: all 0.2s;
+  position: relative;
+}
+.arcade-card:hover {
+  border-color: var(--neon);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--neon) 40%, transparent);
+  transform: translate(-1px, -1px);
+}
+.arcade-cover {
+  width: 140px;
+  height: 80px;
+  flex-shrink: 0;
+  background: #1a1a2e;
+  border: 1px solid #3a3a5a;
+  position: relative;
+  overflow: hidden;
+}
+.arcade-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  filter: saturate(1.1) contrast(1.05);
+  display: block;
+}
+.arcade-cover-fallback {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #1a0030 0%, #2a0050 100%);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px;
+  color: var(--neon);
+  text-shadow: 0 0 4px var(--neon);
+  text-align: center;
+  padding: 8px;
+  line-height: 1.8;
+  align-items: center;
+  justify-content: center;
+}
+.arcade-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.arcade-game-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  color: #fff;
+  line-height: 1.8;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+.arcade-blurb {
+  font-size: 16px;
+  color: #c8c8d8;
+  line-height: 1.35;
+  margin-bottom: 10px;
+  flex: 1;
+}
+.arcade-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: var(--neon);
+  border: 1.5px solid var(--neon);
+  padding: 6px 10px;
+  text-decoration: none;
+  align-self: flex-start;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+  background: transparent;
+}
+.arcade-btn:hover {
+  background: var(--neon);
+  color: #050510;
+  box-shadow: 0 0 12px var(--neon);
+}
+.arcade-footer {
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: #ffeb3b;
+  text-shadow: 0 0 6px rgba(255,235,59,0.6);
+  margin-top: 18px;
+  letter-spacing: 1px;
+  line-height: 1.8;
+  animation: arcadeFlicker 4s infinite;
+}
+
+/* Music player \u2014 retro arcade jukebox */
+.xp-window-body:has(> .music-app) { padding: 0; background: #0a0a14; overflow: auto; }
+.music-app {
+  background:
+    repeating-linear-gradient(0deg, rgba(0,255,180,0.04) 0px, rgba(0,255,180,0.04) 1px, transparent 1px, transparent 3px),
+    radial-gradient(ellipse at top, #1a0030 0%, #0a0a14 75%);
+  min-height: 100%;
+  padding: 16px 14px 22px;
+  font-family: 'VT323', monospace;
+  color: #e0b3ff;
+}
+
+/* LCD-style header with album art + marquee + equalizer */
+.music-lcd {
+  display: flex;
+  gap: 12px;
+  background: #0a0a18;
+  border: 2px solid #ff77c6;
+  padding: 12px;
+  box-shadow:
+    0 0 14px rgba(255,119,198,0.35),
+    inset 0 0 18px rgba(255,119,198,0.08);
+  margin-bottom: 14px;
+}
+.music-cover-art {
+  width: 90px; height: 90px;
+  object-fit: cover;
+  border: 2px solid #ff77c6;
+  box-shadow: 0 0 8px rgba(255,119,198,0.4);
+  flex-shrink: 0;
+  image-rendering: auto;
+  background: #1a1a2e;
+}
+.music-lcd-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.music-lcd-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 11px;
+  color: #ffeb3b;
+  text-shadow: 0 0 6px rgba(255,235,59,0.7);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.music-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #050510;
+  border: 1px inset #4a1a3a;
+  padding: 4px 0;
+  margin-bottom: 10px;
+}
+.music-marquee span {
+  display: inline-block;
+  padding-left: 100%;
+  font-size: 16px;
+  color: #ff77c6;
+  text-shadow: 0 0 4px rgba(255,119,198,0.6);
+  letter-spacing: 1px;
+  animation: marquee 18s linear infinite;
+}
+@keyframes marquee { to { transform: translateX(-100%); } }
+
+/* Pixel sparkle field (replaces the EQ bars) */
+.music-sparkles {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: space-around;
+  height: 22px;
+  margin-top: auto;
+  padding: 2px 6px;
+  background: #050510;
+  border: 1px inset #4a1a3a;
+  overflow: hidden;
+}
+.sparkle {
+  font-size: 11px;
+  line-height: 1;
+  color: #ff77c6;
+  text-shadow: 0 0 4px rgba(255,119,198,0.9), 0 0 8px rgba(255,119,198,0.5);
+  opacity: 0.2;
+  transform: scale(0.7);
+  animation: sparkleTwinkle 1.6s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+.sparkle:nth-child(3n)   { color: #ffb3ff; text-shadow: 0 0 4px rgba(255,179,255,0.9), 0 0 8px rgba(255,179,255,0.5); }
+.sparkle:nth-child(4n+1) { color: #fff;     text-shadow: 0 0 4px rgba(255,255,255,0.95), 0 0 8px rgba(255,119,198,0.6); }
+@keyframes sparkleTwinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.6) rotate(0deg); }
+  45%      { opacity: 1;    transform: scale(1.2) rotate(180deg); }
+  55%      { opacity: 1;    transform: scale(1.2) rotate(180deg); }
+}
+
+/* Prev / counter / next navigation bar */
+.music-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #050510;
+  border-top: 1px dashed #2a2a44;
+  border-bottom: 1px dashed #2a2a44;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+.music-nav-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  color: #ff00aa;
+  background: transparent;
+  border: 1.5px solid #ff00aa;
+  padding: 8px 12px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-shadow: 0 0 4px rgba(255,0,170,0.5);
+}
+.music-nav-btn:hover {
+  background: #ff00aa;
+  color: #050510;
+  text-shadow: none;
+  box-shadow: 0 0 10px rgba(255,0,170,0.7);
+}
+.music-nav-btn:active { transform: translateY(1px); }
+.music-counter {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  color: #ffeb3b;
+  text-shadow: 0 0 6px rgba(255,235,59,0.6);
+  letter-spacing: 1.5px;
+}
+.music-counter-num { color: #ff77c6; text-shadow: 0 0 6px rgba(255,119,198,0.7); }
+
+/* Stage holds all 5 embeds, only the active one is visible */
+.music-stage {
+  background: #0a0a18;
+  border: 2px solid #2a2a44;
+  padding: 10px;
+  margin-bottom: 12px;
+  min-height: 172px;
+}
+.music-track iframe {
+  border-radius: 6px;
+  display: block;
+  background: transparent;
+  width: 100%;
+}
+
+/* Quick-jump track selector strip (horizontally scrollable on small widths) */
+.music-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a44 transparent;
+}
+.music-tabs::-webkit-scrollbar { height: 4px; }
+.music-tabs::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 2px; }
+.music-tab {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px;
+  color: #6a6a8a;
+  background: transparent;
+  border: 1.5px solid #2a2a44;
+  padding: 6px 8px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.music-tab:hover { color: #ff77c6; border-color: #ff77c6; }
+.music-tab.active {
+  color: #050510;
+  background: #ff77c6;
+  border-color: #ff77c6;
+  text-shadow: none;
+  box-shadow: 0 0 10px rgba(255,119,198,0.7);
+}
+
+/* Footer */
+.music-footer {
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px;
+  color: #ffeb3b;
+  text-shadow: 0 0 4px rgba(255,235,59,0.5);
+  margin-top: 18px;
+  letter-spacing: 1px;
+  line-height: 1.8;
+  animation: arcadeFlicker 4s infinite;
+}
 
 /* Bakery / cake gallery */
 .xp-window-body:has(> .cake-gallery) { overflow: hidden; padding: 0; display: flex; }
@@ -843,34 +1316,45 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 12px;
-  background: #fff;
-  padding: 30px;
+  gap: 14px;
+  background: #1a0028;
+  padding: 36px 28px;
   text-align: center;
+  border-top: 2px solid var(--content-border);
 }
-.browser-fallback p {
-  font-family: Tahoma, sans-serif;
-  font-size: 12px;
-  color: #333;
-  line-height: 1.6;
+.browser-fallback .bf-sparkle {
+  font-size: 42px;
+  margin-bottom: 4px;
 }
-.browser-fallback a {
-  color: #0066cc;
-  text-decoration: underline;
-  cursor: pointer;
-  font-family: Tahoma, sans-serif;
+.browser-fallback .bf-heading {
+  font-family: 'Press Start 2P', cursive;
   font-size: 12px;
+  color: #ffb3ff;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.browser-fallback .bf-sub {
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  color: #e0b3ff;
+  line-height: 1.4;
+  margin: 0;
 }
 .browser-fallback .open-btn {
-  padding: 6px 18px;
-  background: var(--xp-button-face);
-  border: 2px outset #ddd;
-  font-family: Tahoma, sans-serif;
-  font-size: 12px;
+  margin-top: 10px;
+  padding: 8px 22px;
+  background: transparent;
+  border: 2px solid var(--content-border);
+  color: #ffb3ff;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  margin-top: 6px;
+  transition: all 0.15s;
 }
-.browser-fallback .open-btn:active { border-style: inset; }
+.browser-fallback .open-btn:hover { background: rgba(204,0,119,0.18); box-shadow: 0 0 12px rgba(204,0,119,0.4); }
+.browser-fallback .open-btn:active { transform: translateY(1px); }
 
 /* ===== CONTEXT MENU ===== */
 #context-menu {
@@ -1144,7 +1628,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
   <!-- DESKTOP NOTICE -->
   <div class="mob-notice">
     <strong>A quick note</strong>
-    My portfolio is designed to be experienced on a desktop &mdash; the full version is an interactive Windows XP environment that I think really showcases my personality. This mobile page is a lightweight introduction; please open the desktop version when you have a moment. &#10024;
+    My portfolio is designed to be experienced on a desktop. The full version is an interactive Windows XP environment that I think really showcases my personality. This mobile page is a lightweight introduction, so please open the desktop version when you have a moment. &#10024;
   </div>
 
   <!-- HERO -->
@@ -1157,7 +1641,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
   <!-- ABOUT -->
   <section class="mob-block">
     <h2>About</h2>
-    <p>Hi, I&rsquo;m Galaxy &mdash; a product builder, professional chef, and founder of a vintage resell business called <em>&aacute;o archive</em>.</p>
+    <p>Hi, I&rsquo;m Galaxy, a product builder, professional chef, and founder of a vintage resell business called <em>&aacute;o archive</em>.</p>
     <p>I&rsquo;ve always been obsessed with how things work. I build operational products for a living, cook at a professional level, and run a vintage business on the side. They&rsquo;re all deeply process-driven, and that&rsquo;s the thread that ties everything I do together.</p>
   </section>
 
@@ -1258,19 +1742,15 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
   <div id="desktop-overlay"></div>
 
   <div id="desktop-icons">
-    <div class="desktop-icon" data-folder="hobbies" ondblclick="openFolder('hobbies')">
+    <div class="desktop-icon" data-folder="games" ondblclick="openHobbies()">
       <div class="icon-img">&#127918;</div>
-      <div class="icon-label">hobbies</div>
+      <div class="icon-label">Games</div>
     </div>
     <div class="desktop-icon" data-folder="about" ondblclick="openFolder('about')">
       <div class="icon-img">&#128100;</div>
       <div class="icon-label">about me</div>
     </div>
-    <div class="desktop-icon" data-folder="photography" ondblclick="openFolder('photography')">
-      <div class="icon-img">&#128247;</div>
-      <div class="icon-label">photography</div>
-    </div>
-    <div class="desktop-icon" data-folder="music" ondblclick="openFolder('music')">
+    <div class="desktop-icon" data-folder="music" ondblclick="openMusic()">
       <div class="icon-img">&#127925;</div>
       <div class="icon-label">music</div>
     </div>
@@ -1302,7 +1782,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
       <div class="icon-img">&#127874;</div>
       <div class="icon-label">my cakes</div>
     </div>
-    <div class="desktop-icon" data-folder="recycle" ondblclick="return false;" oncontextmenu="showRecycleBinMenu(event)">
+    <div class="desktop-icon" data-folder="recycle" ondblclick="openRecycleBin()" oncontextmenu="showRecycleBinMenu(event)">
       <div class="icon-img">&#128465;&#65039;</div>
       <div class="icon-label">recycle bin</div>
     </div>
@@ -1384,11 +1864,6 @@ const folderData = {
     icon: '\uD83D\uDC64',
     type: 'about-combined'
   },
-  photography: {
-    title: 'C:/portfolio/photography/',
-    icon: '\uD83D\uDCF7',
-    type: 'under-construction'
-  },
   music: {
     title: 'C:/portfolio/music/',
     icon: '\uD83C\uDFB5',
@@ -1398,7 +1873,7 @@ const folderData = {
     title: "C:/desktop/pucks-shrine/",
     icon: '\uD83D\uDC08',
     files: [
-      { name: 'sleepy_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat1.png', caption: "Puck doing what he does best \u2014 sleeping" },
+      { name: 'sleepy_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat1.png', caption: "Puck doing what he does best, sleeping" },
       { name: 'chaos_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat2.png', caption: "Puck causing chaos at 3am" },
       { name: 'cute_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat3.png', caption: "Puck being unreasonably cute" },
       { name: 'derp_puck.png', icon: '\uD83D\uDDBC\uFE0F', type: 'cat', img: 'cat4.png', caption: "puck.exe has stopped working" },
@@ -1599,13 +2074,13 @@ function buildCatView(file) {
 
 function buildWinamp() {
   const tracks = [
-    { name: '[Track 1 — Artist Name]', active: false },
-    { name: '[Track 2 — Artist Name]', active: true },
-    { name: '[Track 3 — Artist Name]', active: false },
-    { name: '[Track 4 — Artist Name]', active: false },
-    { name: '[Track 5 — Artist Name]', active: false },
-    { name: '[Track 6 — Artist Name]', active: false },
-    { name: '[Track 7 — Artist Name]', active: false },
+    { name: '[Track 1 by Artist Name]', active: false },
+    { name: '[Track 2 by Artist Name]', active: true },
+    { name: '[Track 3 by Artist Name]', active: false },
+    { name: '[Track 4 by Artist Name]', active: false },
+    { name: '[Track 5 by Artist Name]', active: false },
+    { name: '[Track 6 by Artist Name]', active: false },
+    { name: '[Track 7 by Artist Name]', active: false },
   ];
   let html = `<div class="winamp-view">
     <div class="wa-title">♪ now_playing.exe ♪</div>
@@ -1772,7 +2247,7 @@ function openRacks() {
       <button class="prod-btn" onclick="window.open('${url}','_blank')">\u2197 open in new tab</button>
     </div>
   </div>`;
-  createWindow('Racks \u2014 Vintage Inventory App', '&#128087;', html, { width: 580, height: 440 });
+  createWindow('Racks: Vintage Inventory App', '&#128087;', html, { width: 580, height: 440 });
 }
 
 function openRoadmap() {
@@ -1795,6 +2270,190 @@ function openRoadmap() {
 }
 
 /* ============================
+   HOBBIES \u2014 ARCADE / GAME RECOMMENDATIONS
+   ============================ */
+// Steam app IDs power the cover art. If a cover doesn't load,
+// the card falls back to a pixel-art placeholder automatically.
+const gameLists = [
+  {
+    label: 'PLAYER 1: SOLO MODE',
+    sub: 'relaxing games to play by yourself',
+    color: '#00fff0',
+    games: [
+      { title: 'Stardew Valley',           steamId: '413150',  blurb: "the comfort food of games. I start a new farm every winter and i'm not sorry about it.",            url: 'https://store.steampowered.com/app/413150/' },
+      { title: 'Untitled Goose Game',      steamId: '837470',  blurb: "be the villain you've always wanted to be. honk responsibly.",                                        url: 'https://store.steampowered.com/app/837470/' },
+      { title: 'Rhythm Doctor',            steamId: '774181',  blurb: "a rhythm game disguised as a medical drama. one button, very stressful, weirdly emotional. love it.", url: 'https://store.steampowered.com/app/774181/' },
+      { title: 'Lonely Mountains: Snow Riders', steamId: '2545360', blurb: "peaceful chaos on a snowboard. perfect for decompressing after a long day on your feet.",        url: 'https://store.steampowered.com/app/2545360/Lonely_Mountains_Snow_Riders/' }
+    ]
+  },
+  {
+    label: 'PLAYER 1+2: DATE NIGHT',
+    sub: 'games to play with someone you like',
+    color: '#ff00aa',
+    games: [
+      { title: 'Split Fiction', steamId: '2001120', blurb: "co-op storytelling at its absolute best. bring someone who can handle plot twists.",         url: 'https://store.steampowered.com/app/2001120/' },
+      { title: 'Party Animals', steamId: '1260320', blurb: "physics-based animal brawler. genuine relationship-tester in the best possible way.",         url: 'https://store.steampowered.com/app/1260320/' }
+    ]
+  }
+];
+
+function renderArcadeMenu(rootEl) {
+  rootEl.innerHTML = `<div class="arcade-app arcade-menu-screen">
+    <div class="arcade-header">
+      <div class="arcade-title">\u25C6\u25C6\u25C6 GALAXY'S ARCADE \u25C6\u25C6\u25C6</div>
+      <div class="arcade-subtitle">insert coin to begin</div>
+    </div>
+    <div class="arcade-menu-prompt">SELECT NUMBER OF PLAYERS</div>
+    <div class="arcade-menu-options">
+      ${gameLists.map((cab, i) => `
+        <button class="arcade-menu-btn" data-cab="${i}" style="--neon:${cab.color};">
+          <div class="amb-players">${i === 0 ? '\u2660' : '\u2660\u2660'}</div>
+          <div class="amb-num">${i === 0 ? '1 PLAYER' : '2 PLAYERS'}</div>
+          <div class="amb-sub">${cab.sub}</div>
+          <div class="amb-cta">\u25B6 PRESS START</div>
+        </button>`).join('')}
+    </div>
+    <div class="arcade-footer">\uD83D\uDC7E \uD83C\uDFAE \u2728 \uD83D\uDC7E \uD83C\uDFAE \u2728 \uD83D\uDC7E</div>
+  </div>`;
+
+  rootEl.querySelectorAll('.arcade-menu-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.cab, 10);
+      // Small CRT-style transition before loading the list
+      rootEl.firstElementChild.classList.add('arcade-fadeout');
+      setTimeout(() => renderArcadeList(rootEl, idx), 220);
+    });
+  });
+}
+
+function renderArcadeList(rootEl, cabIdx) {
+  const cab = gameLists[cabIdx];
+  const cards = cab.games.map(g => `
+    <div class="arcade-card" style="--neon:${cab.color};">
+      <div class="arcade-cover">
+        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/${g.steamId}/header.jpg"
+             alt="${g.title}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="arcade-cover-fallback" style="display:none;">${g.title}</div>
+      </div>
+      <div class="arcade-info">
+        <div class="arcade-game-title">${g.title}</div>
+        <div class="arcade-blurb">${g.blurb}</div>
+        <a class="arcade-btn" href="${g.url}" target="_blank">\u25B6 INSERT COIN</a>
+      </div>
+    </div>`).join('');
+
+  rootEl.innerHTML = `<div class="arcade-app arcade-list-screen" style="--neon:${cab.color};">
+    <div class="arcade-list-topbar">
+      <button class="arcade-back-btn">\u25C0 BACK</button>
+      <div class="arcade-list-mode">${cabIdx === 0 ? '1 PLAYER MODE' : '2 PLAYER MODE'}</div>
+    </div>
+    <div class="arcade-cabinet">
+      <div class="arcade-cabinet-header">
+        <span class="arcade-cab-label">${cab.label}</span>
+        <span class="arcade-cab-sub">${cab.sub}</span>
+      </div>
+      <div class="arcade-cards">${cards}</div>
+    </div>
+    <div class="arcade-footer">\u2605 GAME OVER \u2605 thanks for playing \u2605</div>
+  </div>`;
+
+  rootEl.querySelector('.arcade-back-btn').addEventListener('click', () => {
+    rootEl.firstElementChild.classList.add('arcade-fadeout');
+    setTimeout(() => renderArcadeMenu(rootEl), 220);
+  });
+}
+
+function openHobbies() {
+  const winId = createWindow("Galaxy's Arcade: Games", '\uD83C\uDFAE', '<div class="arcade-root"></div>', { width: 560, height: 640 });
+  const root = document.getElementById(winId).querySelector('.arcade-root');
+  renderArcadeMenu(root);
+}
+
+/* ============================
+   MUSIC PLAYER (top 5 tracks)
+   ============================ */
+// To swap a track: open the song in Spotify > Share > Copy Song Link
+// Then replace the spotifyId below with the part after /track/ in the URL.
+const topTracks = [
+  { title: 'Yours',         artist: 'Maye',           spotifyId: '0gmStTUTuiU807EB4KafOX' },
+  { title: 'city too cold', artist: 'blueberryclub',  spotifyId: '6vmRH0xKiM2oDLQDSoA1YB' },
+  { title: 'About You',     artist: 'The 1975',       spotifyId: '3hEfpBHxgieRLz4t3kLNEg' },
+  { title: 'Naive',         artist: 'Jenevieve',      spotifyId: '17s4aRqxfnpJenYRgtBX3w' },
+  { title: 'No One Noticed', artist: 'The Mar\u00edas', spotifyId: '5KZ0wFzNOU3wiUiEXFmIf3' }
+];
+
+function openMusic() {
+  const total = topTracks.length;
+
+  // Render all iframes up front so playback state survives navigation
+  const embeds = topTracks.map((t, i) => `
+    <div class="music-track" data-idx="${i}" style="${i === 0 ? '' : 'display:none;'}">
+      <iframe
+        src="https://open.spotify.com/embed/track/${t.spotifyId}?utm_source=generator&theme=0"
+        width="100%" height="152" frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+    </div>`).join('');
+
+  const trackTabs = topTracks.map((_, i) =>
+    `<button class="music-tab${i === 0 ? ' active' : ''}" data-idx="${i}">TRK_${String(i + 1).padStart(2, '0')}</button>`
+  ).join('');
+
+  const sparkleChars = ['\u2726', '\u2727', '\u22C6', '\u2729', '\u2726', '\u2727'];
+  const sparkleField = Array.from({ length: 14 }, (_, i) => {
+    const ch    = sparkleChars[i % sparkleChars.length];
+    const delay = ((i * 0.17) % 2.1).toFixed(2);
+    const dur   = (1.4 + (i % 3) * 0.35).toFixed(2);
+    return `<span class="sparkle" style="animation-delay:${delay}s;animation-duration:${dur}s;">${ch}</span>`;
+  }).join('');
+
+  const html = `<div class="music-app">
+    <div class="music-lcd">
+      <img class="music-cover-art" src="sad%20cat%20music.jpg" alt="Galaxy's Top 5">
+      <div class="music-lcd-info">
+        <div class="music-lcd-title">\u266A GALAXY'S TOP 5 \u266A</div>
+        <div class="music-marquee"><span>NOW PLAYING \u00b7 on repeat lately \u00b7 5 tracks loaded \u00b7 press play \u00b7 </span></div>
+        <div class="music-sparkles">${sparkleField}</div>
+      </div>
+    </div>
+
+    <div class="music-nav">
+      <button class="music-nav-btn music-prev" type="button" title="Previous track">\u25C0 PREV</button>
+      <div class="music-counter">TRACK <span class="music-counter-num">01</span> / 0${total}</div>
+      <button class="music-nav-btn music-next" type="button" title="Next track">NEXT \u25B6</button>
+    </div>
+
+    <div class="music-stage">${embeds}</div>
+
+    <div class="music-tabs">${trackTabs}</div>
+
+    <div class="music-footer">\u266B  30s preview free \u00b7 full song w/ spotify login  \u266B</div>
+  </div>`;
+
+  const winId = createWindow('jukebox.exe: galaxy\u2019s top 5', '\uD83C\uDFB5', html, { width: 480, height: 640 });
+  const win = document.getElementById(winId);
+
+  let current = 0;
+  const tracks  = win.querySelectorAll('.music-track');
+  const tabs    = win.querySelectorAll('.music-tab');
+  const counter = win.querySelector('.music-counter-num');
+
+  function show(i) {
+    current = (i + total) % total;
+    tracks.forEach((t, idx) => { t.style.display = idx === current ? '' : 'none'; });
+    tabs.forEach((t, idx)   => t.classList.toggle('active', idx === current));
+    counter.textContent = String(current + 1).padStart(2, '0');
+  }
+
+  win.querySelector('.music-prev').addEventListener('click', () => show(current - 1));
+  win.querySelector('.music-next').addEventListener('click', () => show(current + 1));
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => show(parseInt(tab.dataset.idx, 10)));
+  });
+}
+
+/* ============================
    BAKERY / CAKE GALLERY
    ============================ */
 const cakePhotos = [
@@ -1811,7 +2470,7 @@ const cakePhotos = [
 
 function openBakery() {
   openGallery({
-    title: "Galaxy's Bakery \u2014 Cake Gallery",
+    title: "Galaxy's Bakery: Cake Gallery",
     icon: '\uD83C\uDF82',
     photos: cakePhotos,
     emptyMsg: "\uD83C\uDF82 your cakes will live here \uD83C\uDF82"
@@ -1832,7 +2491,7 @@ const puckPhotos = [
 
 function openPuckShrine() {
   openGallery({
-    title: "Puck's Shrine \u2014 Photo Gallery",
+    title: "Puck's Shrine: Photo Gallery",
     icon: '\uD83D\uDC08',
     photos: puckPhotos,
     emptyMsg: "\uD83D\uDC08 puck's photos will live here \uD83D\uDC08"
@@ -1911,9 +2570,9 @@ function openBrowser(name, url, icon) {
       <button class="nav-btn" onclick="window.open('${url}','_blank')" title="Open in new tab">\u2197</button>
     </div>
     <div class="browser-fallback" style="display:flex;">
-      <div style="font-size:48px;margin-bottom:4px;">\u2728</div>
-      <p style="font-size:14px;font-weight:bold;color:#cc0077;">psst... ${name} is too cool for an embedded window</p>
-      <p>click the button below to open it in a shiny new tab \u2728</p>
+      <div class="bf-sparkle">\u2728</div>
+      <div class="bf-heading">psst... ${name} is too cool<br>for an embedded window</div>
+      <p class="bf-sub">click the button below to open it in a shiny new tab \u2728</p>
       <button class="open-btn" onclick="window.open('${url}','_blank')">take me to ${name} \u2192</button>
     </div>
   </div>`;
@@ -1972,6 +2631,14 @@ function showRecycleBinMenu(e) {
 }
 function hideRecycleBinMenu() { document.getElementById('recycle-menu').style.display = 'none'; }
 
+function openRecycleBin() {
+  showXpDialog(
+    'Recycle Bin',
+    "it's empty in here, just vibes and tumbleweeds \uD83C\uDF3E<br><br>psst, try <strong>right-clicking</strong> the bin for surprise messages \u2728",
+    '\uD83D\uDDD1\uFE0F'
+  );
+}
+
 /* Context menu actions */
 function openProperties() {
   hideContextMenu();
@@ -1990,7 +2657,7 @@ function openAboutSite() {
     `<div class="file-content">
       <h2>about this site</h2>
       <p>This is Galaxy's portfolio, built to look and feel like a Windows XP desktop.</p>
-      <p>everything here is a window — folders open into explorers, files open into content viewers, and you can drag everything around.</p>
+      <p>everything here is a window. folders open into explorers, files open into content viewers, and you can drag everything around.</p>
       <p>built with vanilla HTML, CSS, and JS. no frameworks, no libraries, just vibes.</p>
     </div>`, { width: 440, height: 280 });
 }
@@ -2156,7 +2823,7 @@ function computeDefaultIconPositions() {
   const perCol = Math.max(1, Math.floor(availH / STEP));
   const rightX = Math.max(window.innerWidth - 96, 200);
 
-  const leftOrder = ['about', 'cats', 'photography', 'hobbies', 'music', 'bakery', 'racks', 'roadmap'];
+  const leftOrder = ['about', 'cats', 'games', 'music', 'bakery', 'racks', 'roadmap'];
   const rightOrder = ['LinkedIn', 'Notion', 'GitHub'];
   const pos = {};
 
@@ -2194,16 +2861,14 @@ const iconMessages = {
                  properties: "100% Galaxy. no preservatives, no filler." },
   cats:        { delete: "absolutely not. Puck deletes YOU.",
                  properties: "name: Puck. occupation: menace. status: beloved." },
-  hobbies:     { delete: "the hobbies are load-bearing. do not remove.",
-                 properties: "currently: cooking, thrifting, building, repeating." },
-  photography: { delete: "the camera roll is sacred. it stays.",
-                 properties: "shot on whatever was nearest, mostly an iphone." },
+  games:       { delete: "you cannot delete the games. the games delete YOU.",
+                 properties: "currently grinding: Stardew. always Stardew." },
   music:       { delete: "do NOT take away the playlist.",
                  properties: "currently spinning: probably something delusional." },
   bakery:      { delete: "the cakes are non-negotiable.",
                  properties: "preheat oven to 350. always 350." },
   racks:       { delete: "built this from scratch. show some respect.",
-                 properties: "Racks v0 \u2014 the MVP that started it all." },
+                 properties: "Racks v0, the MVP that started it all." },
   roadmap:     { delete: "deleting a roadmapping tool is deeply ironic. denied.",
                  properties: "every PM's love language: a clean intake pipeline." },
   LinkedIn:    { delete: "she WANTS recruiters to find her. leave it.",
@@ -2217,6 +2882,7 @@ const iconMessages = {
 /* XP-style modal alert (replaces native alert for nicer vibe) */
 function showXpDialog(title, message, icon) {
   const overlay = document.createElement('div');
+  overlay.className = 'xp-dialog-overlay';
   overlay.style.cssText = 'position:fixed;inset:0;z-index:95000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.2);';
   const ic = icon || '\u26a0\ufe0f';
   overlay.innerHTML = `<div class="fake-popup" style="position:relative;width:320px;">
@@ -2259,7 +2925,7 @@ function showIconContextMenu(e, key, openFn) {
     return d;
   };
   if (openFn) menu.appendChild(mkItem('open', openFn));
-  menu.appendChild(mkItem('delete', () => showXpDialog("can't delete \u2014 it's load-bearing", msgs.delete, '\uD83D\uDEAB')));
+  menu.appendChild(mkItem('delete', () => showXpDialog("can't delete, it's load-bearing", msgs.delete, '\uD83D\uDEAB')));
   menu.appendChild(divider());
   menu.appendChild(mkItem('properties', () => showXpDialog('properties', msgs.properties, '\u2728')));
   document.body.appendChild(menu);
@@ -2290,7 +2956,7 @@ function isOverRecycleBin(icon) {
 }
 
 function initDesktopIcons() {
-  const ICON_LAYOUT_VERSION = 'v11';
+  const ICON_LAYOUT_VERSION = 'v13';
   if (localStorage.getItem('iconLayoutVersion') !== ICON_LAYOUT_VERSION) {
     localStorage.removeItem('iconPositions');
     localStorage.setItem('iconLayoutVersion', ICON_LAYOUT_VERSION);
@@ -2368,7 +3034,7 @@ function initDesktopIcons() {
           const flavor = msgs ? msgs.delete : "this one's staying right where it is.";
           showXpDialog(
             "can't move to recycle bin",
-            flavor + "<br><br>psst \u2014 try <strong>right-clicking</strong> any icon for hidden options and secret messages \u2728",
+            flavor + "<br><br>psst, try <strong>right-clicking</strong> any icon for hidden options and secret messages \u2728",
             '\uD83D\uDEAB'
           );
           return;
@@ -2423,6 +3089,49 @@ function updateClock() {
 }
 updateClock();
 setInterval(updateClock, 10000);
+
+/* ============================
+   ESC TO CLOSE TOP WINDOW
+   ============================ */
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+
+  // Don't close anything if the user is typing in a field
+  const tag = (e.target && e.target.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+
+  // Priority 1: dismiss any XP-style alert overlays (showXpDialog) or icon ctx menus
+  if (iconCtxEl) { hideIconContextMenu(); return; }
+  hideContextMenu();
+  hideRecycleBinMenu();
+  const overlays = document.querySelectorAll('.xp-dialog-overlay');
+  if (overlays.length) { overlays[overlays.length - 1].remove(); return; }
+
+  // Priority 2: close any open fake virus popup (newest first)
+  const fakePopupsOpen = document.querySelectorAll('#splash-screen .fake-popup');
+  if (fakePopupsOpen.length) {
+    fakePopupsOpen[fakePopupsOpen.length - 1].remove();
+    return;
+  }
+
+  // Priority 3: dismiss the splash/welcome wizard if it's still up
+  const splash = document.getElementById('splash-screen');
+  if (splash && splash.style.display !== 'none' && getComputedStyle(splash).display !== 'none') {
+    dismissSplash();
+    return;
+  }
+
+  // Priority 4: close the topmost open window (highest z-index, not minimized)
+  const ids = Object.keys(openWindows).filter(id => !openWindows[id].minimized);
+  if (!ids.length) return;
+  let topId = ids[0];
+  let topZIndex = parseInt(openWindows[topId].el.style.zIndex, 10) || 0;
+  ids.forEach(id => {
+    const z = parseInt(openWindows[id].el.style.zIndex, 10) || 0;
+    if (z > topZIndex) { topZIndex = z; topId = id; }
+  });
+  closeWindow(topId);
+});
 
 /* ============================
    PREVENT DEFAULT CONTEXT ON NON-DESKTOP
