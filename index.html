@@ -1820,7 +1820,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #245edb 0%, #3a6ea5 40%, #4a90d9 70%, #245edb 100%);
+  background: transparent;
+  pointer-events: none;
 }
 #splash-wizard {
   background: var(--xp-button-face);
@@ -1833,6 +1834,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: Tahoma, G
   display: none;
   flex-direction: column;
   z-index: 56;
+  pointer-events: auto;
 }
 @keyframes wizardIn {
   from { transform: scale(0.7); opacity: 0; }
@@ -3209,65 +3211,6 @@ function triggerShutdown() {
 /* ============================
    SPLASH SCREEN
    ============================ */
-const fakePopups = [
-  { title: 'hey.exe',       icon: '\u2728',          msg: "psst, an excessive amount of talent has been detected" },
-  { title: 'info.exe',      icon: '\uD83D\uDCBC',    msg: "FYI: this person is currently open to opportunities" },
-  { title: 'fyi.exe',       icon: '\uD83C\uDF1F',    msg: "you've just opened my portfolio. proceed with curiosity" },
-  { title: 'fun_fact.exe',  icon: '\uD83D\uDCA1',    msg: "fun fact: zero boring personality detected here" },
-  { title: 'psa.exe',       icon: '\uD83E\uDE77',    msg: "PSA: this person genuinely loves building things" },
-  { title: 'heads_up.exe',  icon: '\uD83D\uDC96',    msg: "heads up: please consider hiring this person" }
-];
-
-let fakePopupZ = 55;
-
-function getFixedPositions() {
-  const sw = window.innerWidth;
-  const sh = window.innerHeight - 36;
-  const cx = (sw - 520) / 2, cy = (sh - 400) / 2;
-  return [
-    { x: Math.max(10, cx - 290), y: Math.max(10, cy - 30), rot: -2 },
-    { x: Math.min(sw - 270, cx + 540), y: Math.max(10, cy + 20), rot: 3 },
-    { x: Math.max(10, cx - 200), y: Math.max(10, cy - 140), rot: 1 },
-    { x: Math.min(sw - 270, cx + 460), y: Math.min(sh - 140, cy + 320), rot: -1.5 },
-    { x: Math.max(10, cx - 100), y: Math.min(sh - 140, cy + 380), rot: 2.5 },
-    { x: Math.min(sw - 270, cx + 560), y: Math.max(10, cy - 100), rot: -2.5 }
-  ];
-}
-
-function spawnFakePopup(data, index) {
-  const splash = document.getElementById('splash-screen');
-  const el = document.createElement('div');
-  el.className = 'fake-popup';
-  const pos = getFixedPositions()[index];
-  el.style.cssText = `left:${pos.x}px;top:${pos.y}px;z-index:${++fakePopupZ};transform:rotate(${pos.rot}deg);`;
-  const ic = data.icon || '\u2728';
-  el.innerHTML = `<div class="fp-titlebar"><span class="fp-icon">${ic}</span><span class="fp-title">${data.title}</span><span class="fp-close">\u2715</span></div><div class="fp-body"><span class="fp-warn">${ic}</span><span class="fp-msg">${data.msg}</span></div><div class="fp-btnbar"><button class="fp-ok">OK</button></div>`;
-
-  el.querySelector('.fp-close').addEventListener('click', () => el.remove());
-  el.querySelector('.fp-ok').addEventListener('click', () => el.remove());
-
-  el.addEventListener('mousedown', () => { el.style.zIndex = ++fakePopupZ; });
-
-  const tb = el.querySelector('.fp-titlebar');
-  let dragging = false, sx, sy, ox, oy;
-  tb.addEventListener('mousedown', e => {
-    if (e.target.closest('.fp-close')) return;
-    dragging = true;
-    sx = e.clientX; sy = e.clientY;
-    ox = el.offsetLeft; oy = el.offsetTop;
-    el.style.transform = 'rotate(0deg)';
-    e.preventDefault();
-  });
-  document.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    el.style.left = (ox + e.clientX - sx) + 'px';
-    el.style.top = (oy + e.clientY - sy) + 'px';
-  });
-  document.addEventListener('mouseup', () => { dragging = false; });
-
-  splash.appendChild(el);
-}
-
 let splashStep = 1;
 const SPLASH_TOTAL_STEPS = 2;
 
@@ -3287,7 +3230,7 @@ function setSplashStep(n) {
   const backBtn = document.getElementById('splash-back-btn');
   const nextBtn = document.getElementById('splash-next-btn');
   if (backBtn) backBtn.disabled = (splashStep === 1);
-  if (nextBtn) nextBtn.textContent = (splashStep === SPLASH_TOTAL_STEPS) ? 'finish' : 'next >';
+  if (nextBtn) nextBtn.textContent = (splashStep === SPLASH_TOTAL_STEPS) ? 'explore my work' : 'next >';
   const bar = document.getElementById('splash-progress');
   if (bar) bar.style.width = (splashStep === SPLASH_TOTAL_STEPS) ? '100%' : '50%';
 }
@@ -3308,7 +3251,6 @@ function dismissSplash() {
   const splash = document.getElementById('splash-screen');
   if (splash.dataset.dismissed === '1') return;
   splash.dataset.dismissed = '1';
-  splash.querySelectorAll('.fake-popup').forEach(p => p.remove());
   splash.style.transition = 'opacity 0.3s';
   splash.style.opacity = '0';
   setTimeout(() => {
@@ -3462,34 +3404,19 @@ function showWelcomeAgain() {
   closeStartMenu();
   const splash = document.getElementById('splash-screen');
   splash.dataset.dismissed = '';
-  splash.querySelectorAll('.fake-popup').forEach(p => p.remove());
   splash.style.display = 'flex';
   splash.style.opacity = '0';
   splash.style.transition = 'opacity 0.3s';
   requestAnimationFrame(() => { splash.style.opacity = '1'; });
   const wizard = document.getElementById('splash-wizard');
-  wizard.style.display = 'none';
+  wizard.style.display = 'flex';
   const bar = document.getElementById('splash-progress');
   bar.style.width = '0%';
-
-  fakePopups.forEach((popup, i) => {
-    setTimeout(() => spawnFakePopup(popup, i), 300 + i * 350);
-  });
-
-  setTimeout(() => {
-    wizard.style.display = 'flex';
-    setTimeout(() => { setSplashStep(1); }, 100);
-  }, 2800);
+  setSplashStep(1);
 }
 
-fakePopups.forEach((popup, i) => {
-  setTimeout(() => spawnFakePopup(popup, i), 300 + i * 350);
-});
-
-setTimeout(() => {
-  document.getElementById('splash-wizard').style.display = 'flex';
-  setTimeout(() => { setSplashStep(1); }, 100);
-}, 2800);
+document.getElementById('splash-wizard').style.display = 'flex';
+setSplashStep(1);
 
 /* ============================
    DRAGGABLE DESKTOP ICONS
@@ -3787,21 +3714,14 @@ document.addEventListener('keydown', e => {
   const overlays = document.querySelectorAll('.xp-dialog-overlay');
   if (overlays.length) { overlays[overlays.length - 1].remove(); return; }
 
-  // Priority 2: close any open fake virus popup (newest first)
-  const fakePopupsOpen = document.querySelectorAll('#splash-screen .fake-popup');
-  if (fakePopupsOpen.length) {
-    fakePopupsOpen[fakePopupsOpen.length - 1].remove();
-    return;
-  }
-
-  // Priority 3: dismiss the splash/welcome wizard if it's still up
+  // Priority 2: dismiss the splash/welcome wizard if it's still up
   const splash = document.getElementById('splash-screen');
   if (splash && splash.style.display !== 'none' && getComputedStyle(splash).display !== 'none') {
     dismissSplash();
     return;
   }
 
-  // Priority 4: close the topmost open window (highest z-index, not minimized)
+  // Priority 3: close the topmost open window (highest z-index, not minimized)
   const ids = Object.keys(openWindows).filter(id => !openWindows[id].minimized);
   if (!ids.length) return;
   let topId = ids[0];
