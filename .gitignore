@@ -1,0 +1,11 @@
+node_modules/
+
+# Local dev helpers, not part of the site
+scripts/
+extract_css.ps1
+styles.css.before-refactor
+_preview.png
+
+# OS
+Thumbs.db
+.DS_Store

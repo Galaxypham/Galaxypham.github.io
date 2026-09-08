@@ -508,6 +508,11 @@ function maximizeWindow(id) {
 function closeWindow(id) {
   const w = openWindows[id];
   if (!w) return;
+  const music = w.el.querySelector('.music-app');
+  if (music && music._spotify) {
+    try { music._spotify.pause(); } catch (e) {}
+    try { music._spotify.destroy(); } catch (e) {}
+  }
   w.el.remove();
   delete openWindows[id];
   removeTaskbarButton(id);
@@ -1096,77 +1101,371 @@ const topTracks = [
   { title: 'No One Noticed', artist: 'The Mar\u00edas', spotifyId: '5KZ0wFzNOU3wiUiEXFmIf3' }
 ];
 
+function loadSpotifyIframeApi() {
+  return new Promise((resolve, reject) => {
+    if (window.__spotifyIframeAPI) {
+      resolve(window.__spotifyIframeAPI);
+      return;
+    }
+    const prev = window.onSpotifyIframeApiReady;
+    let settled = false;
+    window.onSpotifyIframeApiReady = (api) => {
+      window.__spotifyIframeAPI = api;
+      if (typeof prev === 'function') {
+        try { prev(api); } catch (e) {}
+      }
+      if (!settled) { settled = true; resolve(api); }
+    };
+    if (!document.querySelector('script[data-spotify-iframe-api]')) {
+      const s = document.createElement('script');
+      s.src = 'https://open.spotify.com/embed/iframe-api/v1';
+      s.async = true;
+      s.dataset.spotifyIframeApi = '1';
+      s.onerror = () => { if (!settled) { settled = true; reject(new Error('spotify api')); } };
+      document.head.appendChild(s);
+    }
+    setTimeout(() => {
+      if (!settled) { settled = true; reject(new Error('spotify api timeout')); }
+    }, 8000);
+  });
+}
+
+function fmtMusicTime(ms) {
+  const s = Math.max(0, Math.floor((ms || 0) / 1000));
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+}
+
 function openMusic() {
   const total = topTracks.length;
+  const embedId = 'spotify-embed-' + Date.now();
+  const vizCols = 18;
+  const vizRows = 8;
 
-  // Render a single iframe and swap its src on track change.
-  // (Rendering all 5 embeds at once causes Spotify's player to lock up
-  //  because hidden iframes keep stale audio sessions alive.)
-  const embeds = `
-    <div class="music-track" data-idx="0">
-      <iframe id="music-iframe"
-        src="https://open.spotify.com/embed/track/${topTracks[0].spotifyId}?utm_source=generator&theme=0"
-        width="100%" height="152" frameborder="0"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"></iframe>
-    </div>`;
-
-  const trackTabs = topTracks.map((_, i) =>
-    `<button class="music-tab${i === 0 ? ' active' : ''}" data-idx="${i}">TRK_${String(i + 1).padStart(2, '0')}</button>`
-  ).join('');
-
-  const sparkleChars = ['\u2726', '\u2727', '\u22C6', '\u2729', '\u2726', '\u2727'];
-  const sparkleField = Array.from({ length: 14 }, (_, i) => {
-    const ch    = sparkleChars[i % sparkleChars.length];
-    const delay = ((i * 0.17) % 2.1).toFixed(2);
-    const dur   = (1.4 + (i % 3) * 0.35).toFixed(2);
-    return `<span class="sparkle" style="animation-delay:${delay}s;animation-duration:${dur}s;">${ch}</span>`;
+  const vizHtml = Array.from({ length: vizCols }, () => {
+    const cells = Array.from({ length: vizRows }, () => '<span class="wmp-viz-cell"></span>').join('');
+    return `<div class="wmp-viz-col">${cells}</div>`;
   }).join('');
 
+  const listHtml = topTracks.map((t, i) =>
+    `<button class="wmp-track${i === 0 ? ' active' : ''}" type="button" data-idx="${i}">
+      <span class="wmp-track-num">${String(i + 1).padStart(2, '0')}</span>
+      <span class="wmp-track-name">${t.artist} \u2014 ${t.title}</span>
+    </button>`
+  ).join('');
+
+  const sparkleChars = ['\u2665', '\u2726', '\u2661', '\u2727', '\u2665', '\u22C6', '\u2729', '\u2661'];
+  const sparkleRun = (count, seed) => Array.from({ length: count }, (_, i) => {
+    const n     = i + seed;
+    const ch    = sparkleChars[n % sparkleChars.length];
+    const delay = ((n * 0.17) % 2.1).toFixed(2);
+    const dur   = (1.4 + (n % 3) * 0.35).toFixed(2);
+    // Hearts beat in place; stars are free to spin.
+    const kind  = (ch === '\u2665' || ch === '\u2661') ? ' sparkle-heart' : '';
+    return `<span class="sparkle${kind}" style="animation-delay:${delay}s;animation-duration:${dur}s;">${ch}</span>`;
+  }).join('');
+
+  // Three identical chunks scrolling by exactly one chunk width, so the strip
+  // loops with no blank gap. Sparkles bracket the text on both sides.
+  const marqueeChunk = `<span class="wmp-marquee-chunk">` +
+    `<span class="wmp-glitter">${sparkleRun(5, 0)}</span>` +
+    `\u266A GALAXY'S TOP 5 \u00b7 on repeat lately \u00b7 5 tracks loaded \u00b7 press play` +
+    `<span class="wmp-glitter">${sparkleRun(5, 5)}</span>` +
+    `</span>`;
+
   const html = `<div class="music-app">
-    <div class="music-lcd">
-      <img class="music-cover-art" src="sad%20cat%20music.jpg" alt="Galaxy's Top 5">
-      <div class="music-lcd-info">
-        <div class="music-lcd-title">\u266A GALAXY'S TOP 5 \u266A</div>
-        <div class="music-marquee"><span>NOW PLAYING \u00b7 on repeat lately \u00b7 5 tracks loaded \u00b7 press play \u00b7 </span></div>
-        <div class="music-sparkles">${sparkleField}</div>
+    <div class="wmp-shell">
+      <div class="wmp-dial" aria-hidden="false">
+        <button class="wmp-ring-btn wmp-stop" type="button" title="Stop">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+        </button>
+        <button class="wmp-ring-btn wmp-prev" type="button" title="Previous">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="6" width="2.5" height="12"/><polygon points="18,6 9,12 18,18"/></svg>
+        </button>
+        <button class="wmp-ring-btn wmp-next" type="button" title="Next">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,6 15,12 6,18"/><rect x="16.5" y="6" width="2.5" height="12"/></svg>
+        </button>
+        <button class="wmp-ring-btn wmp-home" type="button" title="First track">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,4 21,12 18.5,12 18.5,20 14,20 14,15 10,15 10,20 5.5,20 5.5,12 3,12"/></svg>
+        </button>
+        <button class="wmp-play" type="button" title="Play">
+          <svg class="wmp-icon-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8,5 20,12 8,19"/></svg>
+          <svg class="wmp-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        </button>
+      </div>
+      <div class="wmp-main">
+        <div class="wmp-pills">
+          <button class="wmp-pill is-on" type="button" data-pill="viz" title="Sparkle visualizer on/off">\u2726 EQ</button>
+          <button class="wmp-pill is-on" type="button" data-pill="auto" title="Auto-play the next song when this one ends">AUTO \u25B8</button>
+        </div>
+        <div class="wmp-lcd">
+          <img class="wmp-art" src="sad%20cat%20music.jpg" alt="">
+          <div class="wmp-lcd-meta">
+            <div class="wmp-time">00:00</div>
+            <div class="wmp-track-label">${topTracks[0].artist} \u2014 ${topTracks[0].title}</div>
+          </div>
+          <div class="wmp-viz">${vizHtml}</div>
+        </div>
+        <div class="wmp-marquee">
+          <div class="wmp-marquee-track">${marqueeChunk.repeat(3)}</div>
+        </div>
+        <div class="wmp-transport">
+          <div class="wmp-seek" title="Seek">
+            <div class="wmp-seek-fill"></div>
+            <div class="wmp-seek-knob"></div>
+          </div>
+          <button class="wmp-mini wmp-repeat" type="button" title="Repeat this song">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h9a4 4 0 0 1 0 8h-2"/><polyline points="7 11 7 7 11 7" fill="none"/><path d="M17 17H8a4 4 0 0 1 0-8h2"/><polyline points="17 13 17 17 13 17" fill="none"/></svg>
+          </button>
+          <button class="wmp-mini wmp-shuffle" type="button" title="Shuffle the playlist">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h4l8 10h4" fill="none"/><path d="M4 17h4l8-10h4" fill="none"/><polyline points="17 4 20 7 17 10" fill="none"/><polyline points="17 14 20 17 17 20" fill="none"/></svg>
+          </button>
+        </div>
       </div>
     </div>
-
-    <div class="music-nav">
-      <button class="music-nav-btn music-prev" type="button" title="Previous track">\u25C0 PREV</button>
-      <div class="music-counter">TRACK <span class="music-counter-num">01</span> / 0${total}</div>
-      <button class="music-nav-btn music-next" type="button" title="Next track">NEXT \u25B6</button>
+    <div class="wmp-nowplaying">
+      <div class="wmp-np-header">
+        <span class="wmp-np-title">\u266B NOW PLAYING \u00b7 GALAXY'S TOP 5</span>
+      </div>
+      <div class="wmp-list">${listHtml}</div>
     </div>
-
-    <div class="music-stage">${embeds}</div>
-
-    <div class="music-tabs">${trackTabs}</div>
-
-    <div class="music-footer">\u266B  30s preview free \u00b7 full song w/ spotify login  \u266B</div>
+    <div class="wmp-engine">
+      <div id="${embedId}"></div>
+      <iframe class="wmp-fallback" hidden
+        src="https://open.spotify.com/embed/track/${topTracks[0].spotifyId}?utm_source=generator&theme=0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy" title="Spotify player"></iframe>
+    </div>
   </div>`;
 
-  const winId = createWindow('jukebox.exe: galaxy\u2019s top 5', '\uD83C\uDFB5', html, { width: 960, height: 640 });
+  const winId = createWindow('jukebox.exe: galaxy\u2019s top 5', '\uD83C\uDFB5', html, { width: 760, height: 540 });
   const win = document.getElementById(winId);
+  const app = win.querySelector('.music-app');
+  const playBtn = win.querySelector('.wmp-play');
+  const timeEl = win.querySelector('.wmp-time');
+  const labelEl = win.querySelector('.wmp-track-label');
+  const fillEl = win.querySelector('.wmp-seek-fill');
+  const knobEl = win.querySelector('.wmp-seek-knob');
+  const seekEl = win.querySelector('.wmp-seek');
+  const vizEl = win.querySelector('.wmp-viz');
+  const cols = [...win.querySelectorAll('.wmp-viz-col')];
+  const fallback = win.querySelector('.wmp-fallback');
+  const repeatBtn = win.querySelector('.wmp-repeat');
+  const shuffleBtn = win.querySelector('.wmp-shuffle');
+  const pillViz = win.querySelector('[data-pill="viz"]');
+  const pillAuto = win.querySelector('[data-pill="auto"]');
 
   let current = 0;
-  const iframe = win.querySelector('#music-iframe');
-  const tabs    = win.querySelectorAll('.music-tab');
-  const counter = win.querySelector('.music-counter-num');
+  let playing = false;
+  let duration = 0;
+  let position = 0;
+  let vizOn = true;
+  let autoAdvance = true;
+  let repeat = false;
+  let shuffle = false;
+  let endedLock = false;
+  let controller = null;
+  let vizRaf = 0;
+  let pendingPlay = false;
 
-  function show(i) {
-    const next = (i + total) % total;
-    if (next === current) return;
-    current = next;
-    iframe.src = `https://open.spotify.com/embed/track/${topTracks[current].spotifyId}?utm_source=generator&theme=0`;
-    tabs.forEach((t, idx) => t.classList.toggle('active', idx === current));
-    counter.textContent = String(current + 1).padStart(2, '0');
+  function trackUri(i) {
+    return 'spotify:track:' + topTracks[i].spotifyId;
   }
 
-  win.querySelector('.music-prev').addEventListener('click', () => show(current - 1));
-  win.querySelector('.music-next').addEventListener('click', () => show(current + 1));
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => show(parseInt(tab.dataset.idx, 10)));
+  // Embed commands reject (not throw) when Spotify isn't in a valid state for them.
+  function send(method, ...args) {
+    if (!controller || typeof controller[method] !== 'function') return;
+    try {
+      const result = controller[method](...args);
+      if (result && typeof result.catch === 'function') result.catch(() => {});
+    } catch (e) {}
+  }
+
+  // With shuffle on, step to a random other track instead of the neighbouring one.
+  function stepIndex(dir) {
+    if (!shuffle || total < 2) return current + dir;
+    let pick = current;
+    while (pick === current) pick = Math.floor(Math.random() * total);
+    return pick;
+  }
+
+  function setPlaying(on) {
+    if (playing === on) return;
+    playing = on;
+    playBtn.classList.toggle('is-playing', on);
+    playBtn.title = on ? 'Pause' : 'Play';
+    app.classList.toggle('is-playing', on);
+  }
+
+  function updateMeta() {
+    const t = topTracks[current];
+    labelEl.textContent = t.artist + ' \u2014 ' + t.title;
+    win.querySelectorAll('.wmp-track').forEach((el, idx) => {
+      el.classList.toggle('active', idx === current);
+    });
+  }
+
+  function updateSeek() {
+    timeEl.textContent = fmtMusicTime(position);
+    const pct = duration > 0 ? Math.min(100, (position / duration) * 100) : 0;
+    fillEl.style.width = pct + '%';
+    knobEl.style.left = pct + '%';
+  }
+
+  function startViz() {
+    cancelAnimationFrame(vizRaf);
+    const tick = (now) => {
+      cols.forEach((col, ci) => {
+        const cells = col.querySelectorAll('.wmp-viz-cell');
+        let lit = 1;
+        if (playing && vizOn) {
+          const wave = Math.sin(now / 170 + ci * 0.52) * 0.5 + 0.5;
+          const pulse = Math.sin(now / 90 + ci * 1.1) * 0.25 + 0.75;
+          lit = Math.round(wave * pulse * (cells.length - 1));
+        }
+        cells.forEach((c, i) => {
+          const on = i <= lit;
+          c.classList.toggle('on', on);
+          c.classList.toggle('peak', on && i >= lit - 1 && lit > 3);
+        });
+      });
+      vizRaf = requestAnimationFrame(tick);
+    };
+    vizRaf = requestAnimationFrame(tick);
+  }
+
+  function selectTrack(i, { playAfter = playing } = {}) {
+    const next = (i + total) % total;
+    const changed = next !== current;
+    current = next;
+    position = 0;
+    duration = 0;
+    updateMeta();
+    updateSeek();
+    if (controller) {
+      if (changed) send('loadUri', trackUri(current));
+      if (playAfter) {
+        setTimeout(() => send('play'), changed ? 250 : 0);
+      } else if (changed) {
+        setPlaying(false);
+      }
+    } else if (!controller && fallback && !fallback.hidden) {
+      fallback.src = 'https://open.spotify.com/embed/track/' + topTracks[current].spotifyId + '?utm_source=generator&theme=0';
+    }
+  }
+
+  // Spotify keeps reporting isPaused:false once a track runs out, so the end is
+  // detected from the position alone. endedLock clears when playback rewinds.
+  function onEnded() {
+    if (endedLock) return;
+    endedLock = true;
+    if (repeat) {
+      send('restart');
+      return;
+    }
+    if (autoAdvance) selectTrack(stepIndex(1), { playAfter: true });
+    else setPlaying(false);
+  }
+
+  function seekTo(clientX) {
+    if (!controller || duration <= 0) return;
+    const rect = seekEl.getBoundingClientRect();
+    const pct = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    position = pct * duration;
+    updateSeek();
+    send('seek', position / 1000);
+  }
+
+  playBtn.addEventListener('click', () => {
+    if (controller) {
+      // Parked at the end of a track, togglePlay is a no-op; rewind instead.
+      if (endedLock) send('restart');
+      else send('togglePlay');
+    } else {
+      pendingPlay = !pendingPlay;
+      playBtn.classList.toggle('is-playing', pendingPlay);
+    }
+  });
+  win.querySelector('.wmp-prev').addEventListener('click', () => selectTrack(stepIndex(-1)));
+  win.querySelector('.wmp-next').addEventListener('click', () => selectTrack(stepIndex(1)));
+  win.querySelector('.wmp-home').addEventListener('click', () => selectTrack(0, { playAfter: playing }));
+  win.querySelector('.wmp-stop').addEventListener('click', () => {
+    if (!controller) return;
+    send('pause');
+    setPlaying(false);
+    // Rewind after the pause lands, or Spotify echoes back the old position.
+    setTimeout(() => {
+      send('seek', 0);
+      position = 0;
+      updateSeek();
+    }, 150);
+  });
+  repeatBtn.addEventListener('click', () => {
+    repeat = !repeat;
+    repeatBtn.classList.toggle('is-on', repeat);
+  });
+  shuffleBtn.addEventListener('click', () => {
+    shuffle = !shuffle;
+    shuffleBtn.classList.toggle('is-on', shuffle);
+  });
+  pillViz.addEventListener('click', () => {
+    vizOn = !vizOn;
+    pillViz.classList.toggle('is-on', vizOn);
+    vizEl.classList.toggle('is-off', !vizOn);
+  });
+  pillAuto.addEventListener('click', () => {
+    autoAdvance = !autoAdvance;
+    pillAuto.classList.toggle('is-on', autoAdvance);
+  });
+  win.querySelectorAll('.wmp-track').forEach((btn) => {
+    btn.addEventListener('click', () => selectTrack(parseInt(btn.dataset.idx, 10), { playAfter: true }));
+  });
+
+  seekEl.addEventListener('mousedown', (e) => {
+    seekTo(e.clientX);
+    const move = (ev) => seekTo(ev.clientX);
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  });
+
+  startViz();
+
+  loadSpotifyIframeApi().then((IFrameAPI) => {
+    const el = document.getElementById(embedId);
+    if (!el || !document.body.contains(el)) return;
+    IFrameAPI.createController(el, {
+      uri: trackUri(0),
+      width: 80,
+      height: 80
+    }, (embedController) => {
+      controller = embedController;
+      app._spotify = embedController;
+      if (pendingPlay) {
+        pendingPlay = false;
+        try { embedController.togglePlay(); } catch (e) {}
+      }
+      embedController.addListener('playback_update', (e) => {
+        const d = e && e.data;
+        if (!d) return;
+        duration = d.duration || 0;
+        position = d.position || 0;
+        // Once parked at the end, ignore the stale "still playing" reports until
+        // something (repeat, auto-advance, the user) rewinds us.
+        if (!endedLock) setPlaying(!d.isPaused && !d.isBuffering);
+        updateSeek();
+        if (duration > 0) {
+          if (position < duration - 1200) endedLock = false;
+          else if (position >= duration - 400) onEnded();
+        }
+      });
+    });
+  }).catch(() => {
+    fallback.hidden = false;
+    fallback.removeAttribute('hidden');
+    app.classList.add('is-fallback');
   });
 }
 
@@ -1182,7 +1481,10 @@ const cakePhotos = [
   { src: 'Cake%20Photos/pumpkin%20cake.jpg', caption: 'pumpkin cake \uD83C\uDF83' },
   { src: 'Cake%20Photos/sculpture%20cake.jpg', caption: 'sculpture cake' },
   { src: 'Cake%20Photos/Tiffany%20Cake.jpg', caption: 'tiffany cake \uD83D\uDC8E' },
-  { src: 'Cake%20Photos/xmas%20cake.jpg', caption: 'xmas cake \uD83C\uDF84' }
+  { src: 'Cake%20Photos/xmas%20cake.jpg', caption: 'xmas cake \uD83C\uDF84' },
+  { src: "Cake%20Photos/90%27s%20Nostalgia.jpg", caption: "90's nostalgia" },
+  { src: 'Cake%20Photos/Dog.jpeg', caption: 'dog \uD83D\uDC15' },
+  { src: 'Cake%20Photos/Tennis%20Ball.jpeg', caption: 'tennis ball \uD83C\uDFBE' }
 ];
 
 function openBakery() {
